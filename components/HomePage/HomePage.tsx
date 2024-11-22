@@ -1,9 +1,9 @@
 import { PageContent } from '@ag.ds-next/react/content'; 
-import { Prose } from '@ag.ds-next/react/prose';
-import { H1, H2 } from '@ag.ds-next/react/heading';
+import { H1 } from '@ag.ds-next/react/heading';
 import { Text } from '@ag.ds-next/react/text';
 import { Box, Stack } from '@ag.ds-next/react/box';
 import { AppLayout } from '../AppLayout';
+import { JourneyMap } from '../JourneyMap';
 
 export const HomePage = () => {
   return (
@@ -11,7 +11,7 @@ export const HomePage = () => {
       <Box css={{ padding: '3rem 2rem' }}>
         <PageContent>
           <Stack gap={2} alignItems="center">
-            {/* Title section - keeping existing animations */}
+            {/* Title section */}
             <Box css={{
               textAlign: 'center',
               maxWidth: '1000px',
@@ -63,7 +63,7 @@ export const HomePage = () => {
               <H1>AI Risk and Control Framework</H1>
             </Box>
 
-            {/* Subtitle section with enhanced animations */}
+            {/* Subtitle section */}
             <Box css={{
               maxWidth: '800px',
               textAlign: 'center',
@@ -115,6 +115,11 @@ export const HomePage = () => {
               >
                 Explore stages, guardrails, and principles for safer and ethical AI.
               </Text>
+            </Box>
+
+            {/* Journey Map with explicit width */}
+            <Box css={{ width: '100%' }}>
+              <JourneyMap />
             </Box>
           </Stack>
         </PageContent>
