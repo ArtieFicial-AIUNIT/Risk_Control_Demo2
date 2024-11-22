@@ -11,18 +11,19 @@ export const HomePage = () => {
       <Box css={{ padding: '3rem 2rem' }}>
         <PageContent>
           <Stack gap={2} alignItems="center">
+            {/* Title section - keeping existing animations */}
             <Box css={{
               textAlign: 'center',
               maxWidth: '1000px',
               '& h1': {
-                fontSize: '4rem',
+                fontSize: ['3rem', '3.5rem', '4rem'], // Responsive font sizes
                 fontWeight: '700',
                 background: 'linear-gradient(120deg, #1a365d 0%, #4C51BF 25%, #7366BD 50%, #4C51BF 75%, #1a365d 100%)',
                 backgroundSize: '200% auto',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 animation: 'slideIn 1s ease-out, shine 5s linear infinite',
-                marginBottom: '1.5rem',
+                marginBottom: '2rem',
                 position: 'relative',
                 overflow: 'hidden',
                 '@keyframes slideIn': {
@@ -62,26 +63,36 @@ export const HomePage = () => {
               <H1>AI Risk and Control Framework</H1>
             </Box>
 
+            {/* Subtitle section with enhanced animations */}
             <Box css={{
               maxWidth: '800px',
               textAlign: 'center',
               opacity: 0,
-              animation: 'fadeIn 1s ease-out forwards',
-              animationDelay: '0.5s',
-              padding: '0 1rem',
+              animation: 'fadeIn 1.2s ease-out forwards',
+              animationDelay: '0.7s',
+              padding: '0 1.5rem',
               '& > *': {
-                marginBottom: '1.5rem'
+                marginBottom: '2rem'
+              },
+              '@keyframes fadeIn': {
+                from: { opacity: 0, transform: 'translateY(20px)' },
+                to: { opacity: 1, transform: 'translateY(0)' }
               }
             }}>
               <Text 
                 as="p" 
-                fontSize="xl"
+                fontSize={['lg', 'xl', 'xl']}
                 css={{
                   fontWeight: '500',
-                  lineHeight: '1.6',
-                  color: '#4A5568',
-                  marginBottom: '1rem',
-                  letterSpacing: '0.01em'
+                  lineHeight: '1.8',
+                  color: '#2D3748',
+                  marginBottom: '1.5rem',
+                  letterSpacing: '0.02em',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    color: '#1A365D',
+                    transform: 'translateY(-2px)'
+                  }
                 }}
               >
                 Navigate the journey of AI product development 
@@ -89,13 +100,16 @@ export const HomePage = () => {
               </Text>
               <Text
                 as="p"
-                fontSize="lg"
+                fontSize={['md', 'lg', 'lg']}
                 css={{
-                  color: '#718096',
+                  color: '#4A5568',
                   lineHeight: '1.8',
-                  transition: 'transform 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  opacity: 0,
+                  animation: 'fadeIn 1.2s ease-out forwards 1s',
                   '&:hover': {
-                    transform: 'scale(1.02)'
+                    color: '#2D3748',
+                    transform: 'translateY(-2px)'
                   }
                 }}
               >
