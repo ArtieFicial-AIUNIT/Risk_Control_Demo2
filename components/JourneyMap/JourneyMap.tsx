@@ -200,27 +200,18 @@ export const JourneyMap = () => {
 
                 {/* Stage name */}
                 <Text
+                  as="p"
+                  fontSize={['xs', 'sm', 'sm']} // Made font size responsive
+                  css={{
+                    color: stage.color,
+                    fontWeight: '600',
+                    textAlign: 'center',
+                    margin: 0,
+                    transition: 'color 0.3s ease',
+                  }}
                 >
-                  <Text
-                    as="p"
-                    fontSize={['xs', 'sm', 'sm']} // Made font size responsive
-                    css={{
-                      color: stage.color,
-                      fontWeight: '600',
-                      textAlign: 'center',
-                      transition: 'color 0.3s ease',
-                      margin: 0,
-                      wordBreak: 'break-word', // Added word break for smaller screens
-                      lineHeight: 1.2, // Adjusted line height
-                      maxWidth: '90%', // Prevent text overflow
-                      whiteSpace: 'nowrap', // Keep text in one line
-                      overflow: 'hidden', // Hide overflow
-                      textOverflow: 'ellipsis' // Show ellipsis for overflow
-                    }}
-                  >
-                    {stage.name}
-                  </Text>
-                </motion.div>
+                  {stage.name}
+                </Text>
               </Box>
             </motion.div>
           ))}
