@@ -54,6 +54,22 @@ const glowPulse = keyframes`
   100% { box-shadow: 0 0 5px rgba(66, 153, 225, 0.2); }
 `;
 
+const slideUp = keyframes`
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+`;
+
+const floatAnimation = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+`;
+
+const rippleAnimation = keyframes`
+  0% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.2); }
+  70% { box-shadow: 0 0 0 10px rgba(66, 153, 225, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0); }
+`;
+
 const stages = [
   { 
     title: 'Design',
@@ -487,108 +503,208 @@ export const HomePage = () => {
             ))}
           </Box>
 
-          {/* Enhanced Risks List */}
-          <Box css={{
-            background: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-            overflow: 'hidden',
+          {/* Modern Risk Analytics View */}
+          <div css={{
+            background: 'linear-gradient(145deg, #ffffff, #f8fafc)',
+            borderRadius: '24px',
+            padding: '2rem',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
             animation: `${fadeIn} 0.5s ease-out`,
-            border: '1px solid #E2E8F0'
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '100%',
+              background: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%234299E1\' fill-opacity=\'0.03\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E")',
+            }
           }}>
-            <Box css={{
-              maxHeight: '500px',
-              overflowY: 'auto',
-              padding: '1.5rem',
-              display: 'grid',
+            {/* Risk Summary Pills */}
+            <div css={{
+              display: 'flex',
               gap: '1rem',
+              marginBottom: '2rem',
+              flexWrap: 'wrap'
+            }}>
+              {['High', 'Medium', 'Low'].map(level => {
+                const count = filteredRisks.filter(r => r.level === level).length;
+                const colors = {
+                  High: { bg: '#FFF5F5', border: '#FED7D7', text: '#C53030' },
+                  Medium: { bg: '#FFFAF0', border: '#FEEBC8', text: '#C05621' },
+                  Low: { bg: '#F0FFF4', border: '#C6F6D5', text: '#2F855A' }
+                };
+                return (
+                  <div
+                    key={level}
+                    css={{
+                      padding: '0.75rem 1.5rem',
+                      background: colors[level].bg,
+                      borderRadius: '999px',
+                      border: `1px solid ${colors[level].border}`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      animation: `${floatAnimation} 3s ease-in-out infinite`,
+                      animationDelay: `${['High', 'Medium', 'Low'].indexOf(level) * 0.2}s`,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                        boxShadow: `0 5px 15px ${colors[level].border}50`
+                      }
+                    }}
+                  >
+                    <span css={{ 
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      background: colors[level].text,
+                      animation: `${rippleAnimation} 2s infinite`
+                    }} />
+                    <span css={{ 
+                      color: colors[level].text,
+                      fontWeight: '600',
+                      fontSize: '0.875rem'
+                    }}>
+                      {level}: {count}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Risk Items */}
+            <div css={{
+              display: 'grid',
+              gap: '1.5rem',
+              maxHeight: '600px',
+              overflowY: 'auto',
+              padding: '0.5rem',
               position: 'relative',
               '&::-webkit-scrollbar': {
-                width: '8px',
+                width: '4px',
               },
               '&::-webkit-scrollbar-track': {
-                background: '#F7FAFC'
+                background: '#F7FAFC',
+                borderRadius: '2px',
               },
               '&::-webkit-scrollbar-thumb': {
                 background: '#CBD5E0',
-                borderRadius: '4px',
+                borderRadius: '2px',
                 '&:hover': {
                   background: '#A0AEC0'
                 }
               }
             }}>
-              {filteredRisks.map((risk, index) => (
-                <Box
-                  key={index}
-                  css={{
-                    padding: '1.5rem',
-                    borderRadius: '12px',
-                    background: risk.level === 'High' ? 'linear-gradient(135deg, #FFF5F5, white)' 
-                      : risk.level === 'Medium' ? 'linear-gradient(135deg, #FFFAF0, white)'
-                      : 'linear-gradient(135deg, #F0FFF4, white)',
-                    border: `1px solid ${
-                      risk.level === 'High' ? '#F5656520'
-                      : risk.level === 'Medium' ? '#ED893620'
-                      : '#48BB7820'
-                    }`,
-                    animation: `${fadeIn} 0.3s ease-out forwards ${index * 0.05}s`,
-                    opacity: 0,
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                      transform: 'translateX(5px)',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-                    }
-                  }}
-                >
-                  <Text css={{ 
-                    fontWeight: '500',
-                    color: '#2D3748',
-                    marginBottom: '1rem',
-                    fontSize: '1.1rem'
-                  }}>
-                    {risk.risk}
-                  </Text>
-                  <Box css={{ 
-                    display: 'flex',
-                    gap: '1rem',
-                    fontSize: '0.875rem',
-                    flexWrap: 'wrap',
-                    alignItems: 'center'
-                  }}>
-                    <Tag css={{
-                      background: '#EBF8FF',
-                      color: '#2B6CB0',
-                      border: '1px solid #BEE3F8'
+              {filteredRisks.map((risk, index) => {
+                const riskColors = {
+                  High: { gradient: 'linear-gradient(135deg, #FEB2B2, #FC8181)', shadow: '#FC818150' },
+                  Medium: { gradient: 'linear-gradient(135deg, #FEEBC8, #F6AD55)', shadow: '#F6AD5550' },
+                  Low: { gradient: 'linear-gradient(135deg, #C6F6D5, #68D391)', shadow: '#68D39150' }
+                };
+                
+                return (
+                  <div
+                    key={index}
+                    css={{
+                      position: 'relative',
+                      padding: '1.5rem',
+                      background: 'white',
+                      borderRadius: '16px',
+                      animation: `${slideUp} 0.3s ease-out forwards ${index * 0.05}s`,
+                      opacity: 0,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-5px)',
+                        boxShadow: `0 10px 20px ${riskColors[risk.level as keyof typeof riskColors].shadow}`,
+                      },
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '4px',
+                        background: riskColors[risk.level as keyof typeof riskColors].gradient,
+                        borderRadius: '16px 16px 0 0'
+                      }
+                    }}
+                  >
+                    <div css={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      gap: '1rem',
+                      marginBottom: '1rem'
                     }}>
-                      Stage: {risk.stage}
-                    </Tag>
-                    <Tag css={{
-                      background: '#F7FAFC',
-                      color: '#4A5568',
-                      border: '1px solid #E2E8F0'
+                      <p css={{
+                        margin: 0,
+                        fontSize: '1.1rem',
+                        fontWeight: '500',
+                        color: '#2D3748',
+                        lineHeight: '1.5'
+                      }}>
+                        {risk.risk}
+                      </p>
+                      <span css={{
+                        padding: '0.35rem 1rem',
+                        borderRadius: '999px',
+                        fontSize: '0.75rem',
+                        fontWeight: '600',
+                        background: riskColors[risk.level as keyof typeof riskColors].gradient,
+                        color: 'white',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {risk.level}
+                      </span>
+                    </div>
+
+                    <div css={{
+                      display: 'flex',
+                      gap: '0.75rem',
+                      flexWrap: 'wrap'
                     }}>
-                      {risk.guardrail}
-                    </Tag>
-                    <Tag css={{
-                      background: risk.level === 'High' ? '#FFF5F5'
-                        : risk.level === 'Medium' ? '#FFFAF0'
-                        : '#F0FFF4',
-                      color: risk.level === 'High' ? '#C53030'
-                        : risk.level === 'Medium' ? '#C05621'
-                        : '#2F855A',
-                      border: `1px solid ${
-                        risk.level === 'High' ? '#FED7D7'
-                        : risk.level === 'Medium' ? '#FEEBC8'
-                        : '#C6F6D5'
-                      }`
-                    }}>
-                      {risk.level} Risk
-                    </Tag>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          </Box>
+                      <span css={{
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: '999px',
+                        fontSize: '0.75rem',
+                        background: 'rgba(66, 153, 225, 0.1)',
+                        color: '#2B6CB0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#2B6CB0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M2 17L12 22L22 17" stroke="#2B6CB0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M2 12L12 17L22 12" stroke="#2B6CB0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        {risk.stage}
+                      </span>
+                      <span css={{
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: '999px',
+                        fontSize: '0.75rem',
+                        background: 'rgba(113, 128, 150, 0.1)',
+                        color: '#4A5568',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4A5568" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M12 6V12L16 14" stroke="#4A5568" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        {risk.guardrail}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </PageContent>
       </Box>
 
@@ -617,110 +733,24 @@ export const HomePage = () => {
             gap: '2rem',
             position: 'relative'
           }}>
-            {stages.map((stage, index) => {
-              return (
-                <Box 
-                  key={stage.title}
-                  css={{
-                    cursor: 'pointer',
-                    position: 'relative',
-                    background: '#ffffff',
-                    borderRadius: '24px',
-                    padding: '2rem',
-                    minHeight: '280px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                    transition: 'all 0.3s ease',
-                    overflow: 'hidden',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '4px',
-                      background: stage.color,
-                      opacity: 0.8
-                    },
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: `0 20px 40px ${stage.color}30`
-                    }
-                  }}
-                  onClick={() => handleStageClick(stage.title)}
-                >
-                  <div css={{ position: 'relative', zIndex: 1 }}>
-                    <Box css={{
-                      fontSize: ['2.5rem', '3rem'],
-                      fontWeight: '900',
-                      color: stage.color,
-                      opacity: 0.12,
-                      position: 'absolute',
-                      top: '-1.5rem',
-                      right: '-1rem',
-                      fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
-                      letterSpacing: '-0.04em'
-                    }}>
-                      {index + 1}
-                    </Box>
-                    <Text
-                      as="h3"
-                      css={{
-                        fontSize: ['1.4rem', '1.6rem'],
-                        fontWeight: '700',
-                        color: stage.color,
-                        marginBottom: '1.25rem',
-                        letterSpacing: '-0.02em',
-                        fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
-                      }}
-                    >
-                      {stage.title}
-                    </Text>
-                    <Text
-                      as="p"
-                      css={{
-                        color: '#4A5568',
-                        lineHeight: '1.7',
-                        fontSize: '1rem',
-                        fontWeight: '450',
-                        letterSpacing: '0.01em',
-                        fontFamily: "'Inter', system-ui, sans-serif",
-                      }}
-                    >
-                      {stage.description}
-                    </Text>
-                  </div>
-                  <Box css={{
-                    marginTop: '2rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    color: stage.color,
-                    fontSize: '0.95rem',
-                    fontWeight: '600',
-                    letterSpacing: '0.02em',
-                    opacity: 0.9,
-                    textTransform: 'uppercase',
-                    transition: 'all 0.3s ease',
-                    '&::after': {
-                      content: '"→"',
-                      marginLeft: '0.25rem'
-                    },
-                    '&:hover': {
-                      opacity: 1,
-                      transform: 'translateX(4px)'
-                    }
-                  }}>
-                    Learn More
-                  </Box>
-                </Box>
-              );
-            })}
+            {stages.map((stage, index) => (
+              <StageCard
+                key={stage.title}
+                title={stage.title}
+                description={stage.description}
+                color={stage.color}
+                onClick={() => handleStageClick(stage.title)}
+                css={{
+                  animation: `${fadeIn} 0.5s ease-out forwards ${index * 0.1}s`,
+                  opacity: 0
+                }}
+              />
+            ))}
           </Box>
         </PageContent>
       </Box>
     </AppLayout>
   );
 };
+
+export default HomePage;
