@@ -10,6 +10,7 @@ import { guardrailData } from '../../data/guardrails';
 import { useState, useMemo } from 'react';
 import { Select } from '@ag.ds-next/react/select';
 import { Card } from '@ag.ds-next/react/card';
+import { Tag } from '@ag.ds-next/react/tags';  // Add this import
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -40,6 +41,17 @@ const pulse = keyframes`
 const countUp = keyframes`
   from { transform: translateY(10px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+`;
+
+const rotateIn = keyframes`
+  from { transform: rotateX(30deg) translateY(30px); opacity: 0; }
+  to { transform: rotateX(0) translateY(0); opacity: 1; }
+`;
+
+const glowPulse = keyframes`
+  0% { box-shadow: 0 0 5px rgba(66, 153, 225, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(66, 153, 225, 0.4); }
+  100% { box-shadow: 0 0 5px rgba(66, 153, 225, 0.2); }
 `;
 
 const stages = [
@@ -290,161 +302,292 @@ export const HomePage = () => {
         </PageContent>
       </Box>
 
-      {/* New Dashboard Section */}
+      {/* Enhanced Dashboard Section */}
       <Box css={{
-        background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)',
+        background: 'linear-gradient(135deg, #1a365d05 0%, #ffffff 100%)',
         padding: '4rem 2rem',
-        borderBottom: '1px solid #E2E8F0'
+        borderBottom: '1px solid #E2E8F0',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '100%',
+          background: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%234299E1" fill-opacity="0.03" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="3"/%3E%3Ccircle cx="13" cy="13" r="3"/%3E%3C/g%3E%3C/svg%3E")',
+        }
       }}>
         <PageContent>
-          <H2 css={{
+          <Box css={{
             textAlign: 'center',
-            marginBottom: '3rem',
-            color: '#2D3748',
-            position: 'relative',
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              bottom: '-10px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '60px',
-              height: '4px',
-              background: 'linear-gradient(90deg, #4299E1, #667EEA)',
-              borderRadius: '2px'
-            }
+            marginBottom: '4rem',
+            animation: `${rotateIn} 0.8s ease-out`
           }}>
-            Risk Analytics Dashboard
-          </H2>
+            <H2 css={{
+              background: 'linear-gradient(120deg, #1a365d 0%, #4C51BF 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontSize: '2.5rem',
+              marginBottom: '1rem'
+            }}>
+              Risk Analytics Dashboard
+            </H2>
+            <Text css={{ color: '#4A5568', maxWidth: '600px', margin: '0 auto' }}>
+              Comprehensive overview of AI development risks across all stages
+            </Text>
+          </Box>
 
-          {/* Statistics Cards */}
+          {/* Enhanced Statistics Cards */}
           <Box css={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: '1.5rem',
-            marginBottom: '3rem'
+            marginBottom: '3rem',
+            perspective: '1000px'
           }}>
             {[
-              { label: 'Total Risks', value: riskStats.totalRisks, color: '#4299E1' },
-              { label: 'High Risks', value: riskStats.highRisks, color: '#F56565' },
-              { label: 'Medium Risks', value: riskStats.mediumRisks, color: '#ED8936' },
-              { label: 'Low Risks', value: riskStats.lowRisks, color: '#48BB78' }
-            ].map((stat, index) => (
+              { label: 'Total Risks', value: riskStats.totalRisks, color: '#4299E1', icon: '📊' },
+              { label: 'High Risks', value: riskStats.highRisks, color: '#F56565', icon: '⚠️' },
+              { label: 'Medium Risks', value: riskStats.mediumRisks, color: '#ED8936', icon: '⚡' },
+              { label: 'Low Risks', value: riskStats.lowRisks, color: '#48BB78', icon: '✓' }
+            ].map((stat) => (
               <Card key={stat.label} css={{
-                padding: '1.5rem',
+                padding: '2rem',
                 textAlign: 'center',
-                animation: `${countUp} 0.5s ease-out forwards ${index * 0.1}s`,
+                animation: `${fadeIn} 0.5s ease-out forwards`,  // Changed from rotateIn to simpler fadeIn
                 opacity: 0,
-                background: `linear-gradient(135deg, white, ${stat.color}08)`,
+                background: `linear-gradient(165deg, white, ${stat.color}08)`,
                 border: `1px solid ${stat.color}20`,
+                borderRadius: '16px',
+                position: 'relative',
+                transition: 'all 0.3s ease',
                 '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: `0 12px 24px ${stat.color}20`
+                  transform: 'translateY(-8px)',  // Simplified hover effect
+                  boxShadow: `0 12px 24px ${stat.color}30`,
+                },
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '4px',
+                  background: `linear-gradient(90deg, transparent, ${stat.color}, transparent)`,
+                  borderRadius: '16px 16px 0 0'
                 }
               }}>
-                <Text css={{ fontSize: '2.5rem', fontWeight: '700', color: stat.color }}>
+                <Text css={{ 
+                  fontSize: '2rem',
+                  marginBottom: '0.5rem',
+                  filter: 'opacity(0.8)'
+                }}>
+                  {stat.icon}
+                </Text>
+                <Text css={{ 
+                  fontSize: '2.5rem', 
+                  fontWeight: '700',
+                  color: stat.color,
+                  textShadow: `0 2px 10px ${stat.color}40`
+                }}>
                   {stat.value}
                 </Text>
-                <Text css={{ color: '#4A5568', fontWeight: '500' }}>{stat.label}</Text>
+                <Text css={{ 
+                  color: '#4A5568',
+                  fontWeight: '500',
+                  fontSize: '0.9rem',
+                  marginTop: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>
+                  {stat.label}
+                </Text>
               </Card>
             ))}
           </Box>
 
-          {/* Filters */}
+          {/* Enhanced Filters */}
           <Box css={{
-            display: 'flex',
-            gap: '1rem',
+            background: 'white',
+            padding: '2rem',
+            borderRadius: '16px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
             marginBottom: '2rem',
-            flexWrap: 'wrap'
+            animation: `${fadeIn} 0.5s ease-out`,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '1rem'
           }}>
-            <Box css={{ flex: '1', minWidth: '200px' }}>
-              <Select
-                label="Filter by Stage"
-                options={[
+            {[
+              {
+                label: "Filter by Stage",
+                value: selectedStage,
+                onChange: setSelectedStage,
+                options: [
                   { label: 'All Stages', value: 'all' },
                   ...Object.keys(guardrailData).map(stage => ({
                     label: stage.charAt(0).toUpperCase() + stage.slice(1),
                     value: stage
                   }))
-                ]}
-                value={selectedStage}
-                onChange={e => setSelectedStage(e.target.value)}
-              />
-            </Box>
-            <Box css={{ flex: '1', minWidth: '200px' }}>
-              <Select
-                label="Filter by Risk Level"
-                options={[
+                ]
+              },
+              {
+                label: "Filter by Risk Level",
+                value: selectedRiskLevel,
+                onChange: setSelectedRiskLevel,
+                options: [
                   { label: 'All Levels', value: 'all' },
                   { label: 'High', value: 'High' },
                   { label: 'Medium', value: 'Medium' },
                   { label: 'Low', value: 'Low' }
-                ]}
-                value={selectedRiskLevel}
-                onChange={e => setSelectedRiskLevel(e.target.value)}
-              />
-            </Box>
-            <Box css={{ flex: '1', minWidth: '200px' }}>
-              <Select
-                label="Filter by Guardrail"
-                options={[
+                ]
+              },
+              {
+                label: "Filter by Guardrail",
+                value: selectedGuardrail,
+                onChange: setSelectedGuardrail,
+                options: [
                   { label: 'All Guardrails', value: 'all' },
                   ...guardrailOptions.map(guardrail => ({
                     label: guardrail,
                     value: guardrail
                   }))
-                ]}
-                value={selectedGuardrail}
-                onChange={e => setSelectedGuardrail(e.target.value)}
-              />
-            </Box>
-          </Box>
-
-          {/* Risks List */}
-          <Box css={{
-            display: 'grid',
-            gap: '1rem',
-            maxHeight: '400px',
-            overflowY: 'auto',
-            padding: '1rem',
-            background: 'white',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-          }}>
-            {filteredRisks.map((risk, index) => (
-              <Box
-                key={index}
-                css={{
-                  padding: '1rem',
-                  borderRadius: '8px',
-                  background: risk.level === 'High' ? '#FFF5F5' 
-                    : risk.level === 'Medium' ? '#FFFAF0'
-                    : '#F0FFF4',
-                  borderLeft: `4px solid ${
-                    risk.level === 'High' ? '#F56565'
-                    : risk.level === 'Medium' ? '#ED8936'
-                    : '#48BB78'
-                  }`,
-                  animation: `${fadeIn} 0.3s ease-out forwards ${index * 0.05}s`,
-                  opacity: 0
-                }}
-              >
-                <Text css={{ fontWeight: '500', color: '#2D3748', marginBottom: '0.5rem' }}>
-                  {risk.risk}
-                </Text>
-                <Box css={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', flexWrap: 'wrap' }}>
-                  <Text css={{ color: '#4A5568' }}>Stage: {risk.stage}</Text>
-                  <Text css={{ color: '#4A5568' }}>Guardrail: {risk.guardrail}</Text>
-                  <Text css={{ 
-                    color: risk.level === 'High' ? '#F56565'
-                      : risk.level === 'Medium' ? '#ED8936'
-                      : '#48BB78'
-                  }}>
-                    {risk.level} Risk
-                  </Text>
-                </Box>
+                ]
+              }
+            ].map((filter) => (
+              <Box key={filter.label} css={{ 
+                flex: '1',
+                minWidth: '250px',
+                position: 'relative'
+              }}>
+                <Select
+                  label={filter.label}
+                  value={filter.value}
+                  onChange={e => filter.onChange(e.target.value)}
+                  options={filter.options}
+                  css={{
+                    '& select': {
+                      border: '2px solid #E2E8F0',
+                      borderRadius: '8px',
+                      padding: '0.75rem 1rem',
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        borderColor: '#4299E1',
+                      },
+                      '&:focus': {
+                        borderColor: '#4299E1',
+                        boxShadow: '0 0 0 3px rgba(66, 153, 225, 0.2)'
+                      }
+                    }
+                  }}
+                />
               </Box>
             ))}
+          </Box>
+
+          {/* Enhanced Risks List */}
+          <Box css={{
+            background: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+            overflow: 'hidden',
+            animation: `${fadeIn} 0.5s ease-out`,
+            border: '1px solid #E2E8F0'
+          }}>
+            <Box css={{
+              maxHeight: '500px',
+              overflowY: 'auto',
+              padding: '1.5rem',
+              display: 'grid',
+              gap: '1rem',
+              position: 'relative',
+              '&::-webkit-scrollbar': {
+                width: '8px',
+              },
+              '&::-webkit-scrollbar-track': {
+                background: '#F7FAFC'
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: '#CBD5E0',
+                borderRadius: '4px',
+                '&:hover': {
+                  background: '#A0AEC0'
+                }
+              }
+            }}>
+              {filteredRisks.map((risk, index) => (
+                <Box
+                  key={index}
+                  css={{
+                    padding: '1.5rem',
+                    borderRadius: '12px',
+                    background: risk.level === 'High' ? 'linear-gradient(135deg, #FFF5F5, white)' 
+                      : risk.level === 'Medium' ? 'linear-gradient(135deg, #FFFAF0, white)'
+                      : 'linear-gradient(135deg, #F0FFF4, white)',
+                    border: `1px solid ${
+                      risk.level === 'High' ? '#F5656520'
+                      : risk.level === 'Medium' ? '#ED893620'
+                      : '#48BB7820'
+                    }`,
+                    animation: `${fadeIn} 0.3s ease-out forwards ${index * 0.05}s`,
+                    opacity: 0,
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      transform: 'translateX(5px)',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+                    }
+                  }}
+                >
+                  <Text css={{ 
+                    fontWeight: '500',
+                    color: '#2D3748',
+                    marginBottom: '1rem',
+                    fontSize: '1.1rem'
+                  }}>
+                    {risk.risk}
+                  </Text>
+                  <Box css={{ 
+                    display: 'flex',
+                    gap: '1rem',
+                    fontSize: '0.875rem',
+                    flexWrap: 'wrap',
+                    alignItems: 'center'
+                  }}>
+                    <Tag css={{
+                      background: '#EBF8FF',
+                      color: '#2B6CB0',
+                      border: '1px solid #BEE3F8'
+                    }}>
+                      Stage: {risk.stage}
+                    </Tag>
+                    <Tag css={{
+                      background: '#F7FAFC',
+                      color: '#4A5568',
+                      border: '1px solid #E2E8F0'
+                    }}>
+                      {risk.guardrail}
+                    </Tag>
+                    <Tag css={{
+                      background: risk.level === 'High' ? '#FFF5F5'
+                        : risk.level === 'Medium' ? '#FFFAF0'
+                        : '#F0FFF4',
+                      color: risk.level === 'High' ? '#C53030'
+                        : risk.level === 'Medium' ? '#C05621'
+                        : '#2F855A',
+                      border: `1px solid ${
+                        risk.level === 'High' ? '#FED7D7'
+                        : risk.level === 'Medium' ? '#FEEBC8'
+                        : '#C6F6D5'
+                      }`
+                    }}>
+                      {risk.level} Risk
+                    </Tag>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
           </Box>
         </PageContent>
       </Box>
