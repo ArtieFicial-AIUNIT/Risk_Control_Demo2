@@ -12,6 +12,7 @@ import { guardrailData } from '../../data/guardrails';
 import { Tag } from '@ag.ds-next/react/tags';
 import { keyframes } from '@emotion/react';
 import { Button } from '@ag.ds-next/react/button';
+import { VirtualAssistant } from '../../components/VirtualAssistant/VirtualAssistant';
 
 // Add helper function for risk level color
 const getRiskLevelColor = (level: string) => {
@@ -380,6 +381,12 @@ const StagePage = () => {
           </Box>
         </PageContent>
       </Box>
+      {id === 'design' && (
+        <VirtualAssistant 
+          guardrails={stageInfo.guardrails}
+          stageColor={stageInfo.color}
+        />
+      )}
     </AppLayout>
   );
 };
