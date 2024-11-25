@@ -26,16 +26,6 @@ const float = keyframes`
   50% { transform: translateY(-10px); }
 `;
 
-const glowPulse = keyframes`
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-`;
-
-const tiltEffect = keyframes`
-  0% { transform: perspective(1000px) rotateX(0) rotateY(0); }
-  100% { transform: perspective(1000px) rotateX(2deg) rotateY(2deg); }
-`;
-
 const pulse = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
@@ -192,7 +182,7 @@ export const HomePage = () => {
                   color: '#2D3748',
                   lineHeight: '1.8',
                   fontWeight: '500',
-                  animation: `${fadeIn} 1s ease-out 0.3s forwards`,
+                  animation: `${fadeIn} 1s ease-out forwards`,
                   opacity: 0,
                   textShadow: '0 1px 2px rgba(0,0,0,0.1)'
                 }}
@@ -206,7 +196,7 @@ export const HomePage = () => {
                 css={{
                   color: '#4A5568',
                   lineHeight: '1.8',
-                  animation: `${fadeIn} 1s ease-out 0.6s forwards`,
+                  animation: `${fadeIn} 1s ease-out forwards`,
                   opacity: 0,
                   position: 'relative',
                   '&::after': {
@@ -258,9 +248,6 @@ export const HomePage = () => {
                 <Box 
                   key={stage.title}
                   css={{
-                    animation: `${fadeIn} 0.6s ease-out forwards`,
-                    animationDelay: `${index * 0.1}s`,
-                    opacity: 0,
                     cursor: 'pointer',
                     position: 'relative',
                     background: '#ffffff',
@@ -271,7 +258,7 @@ export const HomePage = () => {
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transition: 'all 0.3s ease',
                     overflow: 'hidden',
                     '&::before': {
                       content: '""',
@@ -283,23 +270,9 @@ export const HomePage = () => {
                       background: stage.color,
                       opacity: 0.8
                     },
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      top: '4px',
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      background: `linear-gradient(180deg, ${stage.color}08 0%, transparent 100%)`,
-                      opacity: 0,
-                      transition: 'opacity 0.3s ease'
-                    },
                     '&:hover': {
-                      transform: 'translateY(-8px) scale(1.02)',
-                      boxShadow: `0 20px 40px ${stage.color}20`,
-                      '&::after': {
-                        opacity: 1
-                      }
+                      transform: 'translateY(-8px)',
+                      boxShadow: `0 20px 40px ${stage.color}30`
                     }
                   }}
                   onClick={() => console.log(`Clicked ${stage.title}`)}
@@ -323,10 +296,7 @@ export const HomePage = () => {
                       css={{
                         fontSize: ['1.4rem', '1.6rem'],
                         fontWeight: '700',
-                        background: `linear-gradient(135deg, ${stage.color} 0%, ${stage.color}dd 100%)`,
-                        backgroundClip: 'text',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
+                        color: stage.color,
                         marginBottom: '1.25rem',
                         letterSpacing: '-0.02em',
                         fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
@@ -359,17 +329,14 @@ export const HomePage = () => {
                     letterSpacing: '0.02em',
                     opacity: 0.9,
                     textTransform: 'uppercase',
+                    transition: 'all 0.3s ease',
                     '&::after': {
                       content: '"→"',
-                      transition: 'all 0.3s ease',
-                      fontSize: '1.2em',
                       marginLeft: '0.25rem'
                     },
-                    '&:hover::after': {
-                      transform: 'translateX(4px)',
-                    },
                     '&:hover': {
-                      opacity: 1
+                      opacity: 1,
+                      transform: 'translateX(4px)'
                     }
                   }}>
                     Learn More
