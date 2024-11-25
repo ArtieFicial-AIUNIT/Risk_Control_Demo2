@@ -135,44 +135,6 @@ const StagePage = () => {
             </Button>
           </Box>
 
-          {/* Quick Navigation */}
-          <Box css={{ 
-            marginBottom: '2rem',
-            padding: '1rem',
-            background: '#f8fafc',
-            borderRadius: '8px',
-            border: '1px solid #e2e8f0'
-          }}>
-            <Text weight="bold" css={{ marginBottom: '1rem' }}>Quick Navigation:</Text>
-            <Box css={{ 
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '0.5rem'
-            }}>
-              {stageInfo.guardrails.map((guardrail, index) => (
-                <Button 
-                  key={index}
-                  variant="text"
-                  onClick={() => {
-                    const element = document.getElementById(`guardrail-${index}`);
-                    element?.scrollIntoView({ behavior: 'smooth' });
-                    if (!expandedGuardrails.includes(index)) {
-                      toggleGuardrail(index);
-                    }
-                  }}
-                  css={{
-                    color: stageInfo.color,
-                    '&:hover': {
-                      background: `${stageInfo.color}20`
-                    }
-                  }}
-                >
-                  {guardrail.name}
-                </Button>
-              ))}
-            </Box>
-          </Box>
-
           <Box css={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {stageInfo.guardrails.map((guardrail, index) => (
               <Card 
