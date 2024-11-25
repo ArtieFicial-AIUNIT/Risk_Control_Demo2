@@ -6,6 +6,10 @@ import { AppLayout } from '../AppLayout';
 import { StageCard } from '../StageCard/StageCard';
 import { keyframes } from '@emotion/react';
 import { useRouter } from 'next/router';
+import { guardrailData } from '../../data/guardrails';
+import { useState, useMemo } from 'react';
+import { Select } from '@ag.ds-next/react/select';
+import { Card } from '@ag.ds-next/react/card';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -31,6 +35,11 @@ const pulse = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
+`;
+
+const countUp = keyframes`
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 `;
 
 const stages = [
@@ -78,10 +87,66 @@ const stages = [
 
 export const HomePage = () => {
   const router = useRouter();
-  
+  const [selectedStage, setSelectedStage] = useState<string>('all');
+  const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>('all');  // Fixed syntax error
+  const [selectedGuardrail, setSelectedGuardrail] = useState<string>('all');
+
+  // Get unique guardrail names across all stages
+  const guardrailOptions = useMemo(() => {
+    const guardrails = new Set<string>();
+    Object.values(guardrailData).forEach(stageData => {
+      stageData.guardrails.forEach(guardrail => {
+        guardrails.add(guardrail.name);
+      });
+    });
+    return Array.from(guardrails).sort();
+  }, []);
+
   const handleStageClick = (stageId: string) => {
     router.push(`/stage/${stageId.toLowerCase()}`);
   };
+
+  const riskStats = useMemo(() => {
+    let totalRisks = 0;
+    let highRisks = 0;
+    let mediumRisks = 0;
+    let lowRisks = 0;
+    
+    Object.entries(guardrailData).forEach(([_, stageData]) => {
+      stageData.guardrails.forEach(guardrail => {
+        totalRisks += guardrail.risks.length;
+        if (guardrail.riskLevel === 'High') highRisks += guardrail.risks.length;
+        if (guardrail.riskLevel === 'Medium') mediumRisks += guardrail.risks.length;
+        if (guardrail.riskLevel === 'Low') lowRisks += guardrail.risks.length;
+      });
+    });
+
+    return { totalRisks, highRisks, mediumRisks, lowRisks };
+  }, []);
+
+  const filteredRisks = useMemo(() => {
+    let risks: Array<{ stage: string; level: string; risk: string; guardrail: string; }> = [];
+    
+    Object.entries(guardrailData).forEach(([stageName, stageData]) => {
+      if (selectedStage === 'all' || selectedStage === stageName) {
+        stageData.guardrails.forEach(guardrail => {
+          if ((selectedRiskLevel === 'all' || selectedRiskLevel === guardrail.riskLevel) &&
+              (selectedGuardrail === 'all' || selectedGuardrail === guardrail.name)) {
+            guardrail.risks.forEach(risk => {
+              risks.push({
+                stage: stageName,
+                level: guardrail.riskLevel,
+                risk: risk,
+                guardrail: guardrail.name
+              });
+            });
+          }
+        });
+      }
+    });
+
+    return risks;
+  }, [selectedStage, selectedRiskLevel, selectedGuardrail]);
 
   return (
     <AppLayout>
@@ -221,6 +286,165 @@ export const HomePage = () => {
                 journey adheres to best practices and risk management principles.
               </Text>
             </Box>
+          </Box>
+        </PageContent>
+      </Box>
+
+      {/* New Dashboard Section */}
+      <Box css={{
+        background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)',
+        padding: '4rem 2rem',
+        borderBottom: '1px solid #E2E8F0'
+      }}>
+        <PageContent>
+          <H2 css={{
+            textAlign: 'center',
+            marginBottom: '3rem',
+            color: '#2D3748',
+            position: 'relative',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: '-10px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '60px',
+              height: '4px',
+              background: 'linear-gradient(90deg, #4299E1, #667EEA)',
+              borderRadius: '2px'
+            }
+          }}>
+            Risk Analytics Dashboard
+          </H2>
+
+          {/* Statistics Cards */}
+          <Box css={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '1.5rem',
+            marginBottom: '3rem'
+          }}>
+            {[
+              { label: 'Total Risks', value: riskStats.totalRisks, color: '#4299E1' },
+              { label: 'High Risks', value: riskStats.highRisks, color: '#F56565' },
+              { label: 'Medium Risks', value: riskStats.mediumRisks, color: '#ED8936' },
+              { label: 'Low Risks', value: riskStats.lowRisks, color: '#48BB78' }
+            ].map((stat, index) => (
+              <Card key={stat.label} css={{
+                padding: '1.5rem',
+                textAlign: 'center',
+                animation: `${countUp} 0.5s ease-out forwards ${index * 0.1}s`,
+                opacity: 0,
+                background: `linear-gradient(135deg, white, ${stat.color}08)`,
+                border: `1px solid ${stat.color}20`,
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: `0 12px 24px ${stat.color}20`
+                }
+              }}>
+                <Text css={{ fontSize: '2.5rem', fontWeight: '700', color: stat.color }}>
+                  {stat.value}
+                </Text>
+                <Text css={{ color: '#4A5568', fontWeight: '500' }}>{stat.label}</Text>
+              </Card>
+            ))}
+          </Box>
+
+          {/* Filters */}
+          <Box css={{
+            display: 'flex',
+            gap: '1rem',
+            marginBottom: '2rem',
+            flexWrap: 'wrap'
+          }}>
+            <Box css={{ flex: '1', minWidth: '200px' }}>
+              <Select
+                label="Filter by Stage"
+                options={[
+                  { label: 'All Stages', value: 'all' },
+                  ...Object.keys(guardrailData).map(stage => ({
+                    label: stage.charAt(0).toUpperCase() + stage.slice(1),
+                    value: stage
+                  }))
+                ]}
+                value={selectedStage}
+                onChange={e => setSelectedStage(e.target.value)}
+              />
+            </Box>
+            <Box css={{ flex: '1', minWidth: '200px' }}>
+              <Select
+                label="Filter by Risk Level"
+                options={[
+                  { label: 'All Levels', value: 'all' },
+                  { label: 'High', value: 'High' },
+                  { label: 'Medium', value: 'Medium' },
+                  { label: 'Low', value: 'Low' }
+                ]}
+                value={selectedRiskLevel}
+                onChange={e => setSelectedRiskLevel(e.target.value)}
+              />
+            </Box>
+            <Box css={{ flex: '1', minWidth: '200px' }}>
+              <Select
+                label="Filter by Guardrail"
+                options={[
+                  { label: 'All Guardrails', value: 'all' },
+                  ...guardrailOptions.map(guardrail => ({
+                    label: guardrail,
+                    value: guardrail
+                  }))
+                ]}
+                value={selectedGuardrail}
+                onChange={e => setSelectedGuardrail(e.target.value)}
+              />
+            </Box>
+          </Box>
+
+          {/* Risks List */}
+          <Box css={{
+            display: 'grid',
+            gap: '1rem',
+            maxHeight: '400px',
+            overflowY: 'auto',
+            padding: '1rem',
+            background: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+          }}>
+            {filteredRisks.map((risk, index) => (
+              <Box
+                key={index}
+                css={{
+                  padding: '1rem',
+                  borderRadius: '8px',
+                  background: risk.level === 'High' ? '#FFF5F5' 
+                    : risk.level === 'Medium' ? '#FFFAF0'
+                    : '#F0FFF4',
+                  borderLeft: `4px solid ${
+                    risk.level === 'High' ? '#F56565'
+                    : risk.level === 'Medium' ? '#ED8936'
+                    : '#48BB78'
+                  }`,
+                  animation: `${fadeIn} 0.3s ease-out forwards ${index * 0.05}s`,
+                  opacity: 0
+                }}
+              >
+                <Text css={{ fontWeight: '500', color: '#2D3748', marginBottom: '0.5rem' }}>
+                  {risk.risk}
+                </Text>
+                <Box css={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', flexWrap: 'wrap' }}>
+                  <Text css={{ color: '#4A5568' }}>Stage: {risk.stage}</Text>
+                  <Text css={{ color: '#4A5568' }}>Guardrail: {risk.guardrail}</Text>
+                  <Text css={{ 
+                    color: risk.level === 'High' ? '#F56565'
+                      : risk.level === 'Medium' ? '#ED8936'
+                      : '#48BB78'
+                  }}>
+                    {risk.level} Risk
+                  </Text>
+                </Box>
+              </Box>
+            ))}
           </Box>
         </PageContent>
       </Box>
