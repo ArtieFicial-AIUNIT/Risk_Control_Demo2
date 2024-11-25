@@ -31,6 +31,17 @@ const glowPulse = keyframes`
   50% { opacity: 1; }
 `;
 
+const tiltEffect = keyframes`
+  0% { transform: perspective(1000px) rotateX(0) rotateY(0); }
+  100% { transform: perspective(1000px) rotateX(2deg) rotateY(2deg); }
+`;
+
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
 const stages = [
   { 
     title: 'Design',
@@ -223,6 +234,7 @@ export const HomePage = () => {
         padding: '6rem 2rem',
         position: 'relative',
         overflow: 'hidden',
+        perspective: '1000px',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -239,75 +251,132 @@ export const HomePage = () => {
             display: 'grid',
             gridTemplateColumns: ['1fr', 'repeat(2, 1fr)', 'repeat(4, 1fr)'],
             gap: '2rem',
-            position: 'relative',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: '20%',
-              left: '0',
-              right: '0',
-              height: '1px',
-              background: 'linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent)',
-              zIndex: 0
-            }
+            position: 'relative'
           }}>
-            {stages.map((stage, index) => (
-              <Box 
-                key={stage.title}
-                css={{
-                  animation: `${fadeIn} 0.6s ease-out forwards`,
-                  animationDelay: `${index * 0.1}s`,
-                  opacity: 0,
-                  transform: 'translateY(20px)',
-                  transition: 'all 0.3s ease',
-                  position: 'relative',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: '-10px',
-                    left: '-10px',
-                    right: '-10px',
-                    bottom: '-10px',
-                    background: `linear-gradient(135deg, ${stage.color}20, transparent)`,
-                    borderRadius: '20px',
+            {stages.map((stage, index) => {
+              return (
+                <Box 
+                  key={stage.title}
+                  css={{
+                    animation: `${fadeIn} 0.6s ease-out forwards`,
+                    animationDelay: `${index * 0.1}s`,
                     opacity: 0,
-                    transition: 'opacity 0.3s ease',
-                    zIndex: 0
-                  },
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
+                    cursor: 'pointer',
+                    position: 'relative',
+                    background: '#ffffff',
+                    borderRadius: '24px',
+                    padding: '2rem',
+                    minHeight: '280px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    overflow: 'hidden',
                     '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '4px',
+                      background: stage.color,
+                      opacity: 0.8
+                    },
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      top: '4px',
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: `linear-gradient(180deg, ${stage.color}08 0%, transparent 100%)`,
+                      opacity: 0,
+                      transition: 'opacity 0.3s ease'
+                    },
+                    '&:hover': {
+                      transform: 'translateY(-8px) scale(1.02)',
+                      boxShadow: `0 20px 40px ${stage.color}20`,
+                      '&::after': {
+                        opacity: 1
+                      }
+                    }
+                  }}
+                  onClick={() => console.log(`Clicked ${stage.title}`)}
+                >
+                  <div css={{ position: 'relative', zIndex: 1 }}>
+                    <Box css={{
+                      fontSize: ['2.5rem', '3rem'],
+                      fontWeight: '900',
+                      color: stage.color,
+                      opacity: 0.12,
+                      position: 'absolute',
+                      top: '-1.5rem',
+                      right: '-1rem',
+                      fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+                      letterSpacing: '-0.04em'
+                    }}>
+                      {index + 1}
+                    </Box>
+                    <Text
+                      as="h3"
+                      css={{
+                        fontSize: ['1.4rem', '1.6rem'],
+                        fontWeight: '700',
+                        background: `linear-gradient(135deg, ${stage.color} 0%, ${stage.color}dd 100%)`,
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        marginBottom: '1.25rem',
+                        letterSpacing: '-0.02em',
+                        fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
+                      }}
+                    >
+                      {stage.title}
+                    </Text>
+                    <Text
+                      as="p"
+                      css={{
+                        color: '#4A5568',
+                        lineHeight: '1.7',
+                        fontSize: '1rem',
+                        fontWeight: '450',
+                        letterSpacing: '0.01em',
+                        fontFamily: "'Inter', system-ui, sans-serif",
+                      }}
+                    >
+                      {stage.description}
+                    </Text>
+                  </div>
+                  <Box css={{
+                    marginTop: '2rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    color: stage.color,
+                    fontSize: '0.95rem',
+                    fontWeight: '600',
+                    letterSpacing: '0.02em',
+                    opacity: 0.9,
+                    textTransform: 'uppercase',
+                    '&::after': {
+                      content: '"→"',
+                      transition: 'all 0.3s ease',
+                      fontSize: '1.2em',
+                      marginLeft: '0.25rem'
+                    },
+                    '&:hover::after': {
+                      transform: 'translateX(4px)',
+                    },
+                    '&:hover': {
                       opacity: 1
                     }
-                  }
-                }}
-              >
-                <Box css={{
-                  position: 'relative',
-                  zIndex: 1,
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    top: '5px',
-                    left: '5px',
-                    width: '10px',
-                    height: '10px',
-                    background: stage.color,
-                    borderRadius: '50%',
-                    animation: `${glowPulse} 2s ease-in-out infinite`,
-                    animationDelay: `${index * 0.2}s`
-                  }
-                }}>
-                  <StageCard
-                    title={stage.title}
-                    description={stage.description}
-                    color={stage.color}
-                    number={index + 1}
-                    onClick={() => console.log(`Clicked ${stage.title}`)}
-                  />
+                  }}>
+                    Learn More
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              );
+            })}
           </Box>
         </PageContent>
       </Box>
