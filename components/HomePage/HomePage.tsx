@@ -5,6 +5,7 @@ import { H1, H2 } from '@ag.ds-next/react/heading';
 import { AppLayout } from '../AppLayout';
 import { StageCard } from '../StageCard/StageCard';
 import { keyframes } from '@emotion/react';
+import { useRouter } from 'next/router';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -76,6 +77,12 @@ const stages = [
 ];
 
 export const HomePage = () => {
+  const router = useRouter();
+  
+  const handleStageClick = (stageId: string) => {
+    router.push(`/stage/${stageId.toLowerCase()}`);
+  };
+
   return (
     <AppLayout>
       {/* Introduction Section */}
@@ -275,7 +282,7 @@ export const HomePage = () => {
                       boxShadow: `0 20px 40px ${stage.color}30`
                     }
                   }}
-                  onClick={() => console.log(`Clicked ${stage.title}`)}
+                  onClick={() => handleStageClick(stage.title)}
                 >
                   <div css={{ position: 'relative', zIndex: 1 }}>
                     <Box css={{
