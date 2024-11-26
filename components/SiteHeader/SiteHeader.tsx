@@ -14,7 +14,10 @@ const headerStyles = css`
   }
 `;
 
-const NAV_LINKS = [{ label: 'Home', href: '/' }];
+const NAV_LINKS = [
+  { label: 'Home', href: '/' },
+  { label: 'Risk Assessment', href: '/assessment' }
+];
 
 export const SiteHeader = () => {
   const router = useRouter();

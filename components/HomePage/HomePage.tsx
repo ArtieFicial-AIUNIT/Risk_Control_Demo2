@@ -3,7 +3,6 @@ import { Box } from '@ag.ds-next/react/box';
 import { Text } from '@ag.ds-next/react/text';
 import { H1, H2 } from '@ag.ds-next/react/heading';
 import { AppLayout } from '../AppLayout';
-import { StageCard } from '../StageCard/StageCard';
 import { keyframes } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { guardrailData } from '../../data/guardrails';
@@ -11,6 +10,7 @@ import { useState, useMemo } from 'react';
 import { Select } from '@ag.ds-next/react/select';
 import { Card } from '@ag.ds-next/react/card';
 import { Tag } from '@ag.ds-next/react/tags';  // Add this import
+import { RiskAssessment } from '../RiskAssessment/RiskAssessment';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -70,49 +70,6 @@ const rippleAnimation = keyframes`
   100% { box-shadow: 0 0 0 0 rgba(66, 153, 225, 0); }
 `;
 
-const stages = [
-  { 
-    title: 'Design',
-    description: 'Plan and architect your AI solution with ethical considerations in mind.',
-    color: '#4299E1'
-  },
-  { 
-    title: 'Data',
-    description: 'Collect and prepare data while ensuring privacy and fairness.',
-    color: '#48BB78'
-  },
-  { 
-    title: 'Training',
-    description: 'Train models with focus on accuracy and bias mitigation.',
-    color: '#ED8936'
-  },
-  { 
-    title: 'Test',
-    description: 'Validate model performance and check for potential issues.',
-    color: '#9F7AEA'
-  },
-  { 
-    title: 'Integrate',
-    description: 'Implement the solution while maintaining security standards.',
-    color: '#F56565'
-  },
-  { 
-    title: 'Deploy',
-    description: 'Launch your AI solution with proper monitoring in place.',
-    color: '#38B2AC'
-  },
-  { 
-    title: 'Monitor',
-    description: 'Track performance and address emerging issues.',
-    color: '#667EEA'
-  },
-  { 
-    title: 'Decommission',
-    description: 'Safely retire or replace AI systems when needed.',
-    color: '#718096'
-  }
-];
-
 export const HomePage = () => {
   const router = useRouter();
   const [selectedStage, setSelectedStage] = useState<string>('all');
@@ -129,10 +86,6 @@ export const HomePage = () => {
     });
     return Array.from(guardrails).sort();
   }, []);
-
-  const handleStageClick = (stageId: string) => {
-    router.push(`/stage/${stageId.toLowerCase()}`);
-  };
 
   const riskStats = useMemo(() => {
     let totalRisks = 0;
@@ -332,7 +285,7 @@ export const HomePage = () => {
           left: 0,
           right: 0,
           height: '100%',
-          background: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%234299E1" fill-opacity="0.03" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="3"/%3E%3Ccircle cx="13" cy="13" r="3"/%3E%3C/g%3E%3C/svg%3E")',
+          background: 'url("data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%234299E1" fill-opacity="0.03" fill-rule="evenodd"%3E%3Ccircle cx="3" cy="3" r="3"/%3E%3Ccircle cx="13" cy="13" r="3"/%3E%3C/g%3E%3C/svg%3E%3C/svg%3E")',
         }
       }}>
         <PageContent>
@@ -708,44 +661,19 @@ export const HomePage = () => {
         </PageContent>
       </Box>
 
-      {/* Stages Section */}
-      <Box css={{ 
-        background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
-        padding: '6rem 2rem',
-        position: 'relative',
-        overflow: 'hidden',
-        perspective: '1000px',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'radial-gradient(circle at 80% 20%, rgba(147, 197, 253, 0.1) 0%, transparent 50%)',
-          zIndex: 0
-        }
+      {/* Add Risk Assessment Section */}
+      <Box css={{
+        background: 'linear-gradient(135deg, #f6f8fa 0%, #ffffff 100%)',
+        padding: '4rem 2rem',
+        position: 'relative'
       }}>
         <PageContent>
           <Box css={{ 
-            display: 'grid',
-            gridTemplateColumns: ['1fr', 'repeat(2, 1fr)', 'repeat(4, 1fr)'],
-            gap: '2rem',
-            position: 'relative'
+            maxWidth: '1200px', 
+            margin: '0 auto',
+            animation: `${fadeIn} 0.5s ease-out` 
           }}>
-            {stages.map((stage, index) => (
-              <StageCard
-                key={stage.title}
-                title={stage.title}
-                description={stage.description}
-                color={stage.color}
-                onClick={() => handleStageClick(stage.title)}
-                css={{
-                  animation: `${fadeIn} 0.5s ease-out forwards ${index * 0.1}s`,
-                  opacity: 0
-                }}
-              />
-            ))}
+            <RiskAssessment />
           </Box>
         </PageContent>
       </Box>
