@@ -71,6 +71,11 @@ const StagePage = () => {
     }
   };
 
+  const handleDashboardClick = () => {
+    // You can replace this with your actual dashboard URL
+    window.open('/dashboard', '_blank');
+  };
+
   if (!stageInfo) {
     return (
       <AppLayout>
@@ -107,7 +112,7 @@ const StagePage = () => {
             marginBottom: '2rem'
           }}>
             <H1 css={{
-              color: stageInfo.color,
+              color: stageInfo.color , // Changed from using stageInfo.color to using a fixed orange color
               position: 'relative',
               '&::after': {
                 content: '""',
@@ -287,10 +292,30 @@ const StagePage = () => {
                               borderRadius: '4px',
                               fontSize: '0.95rem',
                               lineHeight: '1.5',
-                              color: '#4A5568'
+                              color: '#4A5568',
+                              cursor: control.toLowerCase().includes('dashboard') ? 'pointer' : 'default',
+                              transition: 'all 0.3s ease',
+                              '&:hover': control.toLowerCase().includes('dashboard') ? {
+                                background: '#EDF2F7',
+                                transform: 'translateX(5px)'
+                              } : {}
+                            }}
+                            onClick={() => {
+                              if (control.toLowerCase().includes('dashboard')) {
+                                handleDashboardClick();
+                              }
                             }}
                           >
                             {control}
+                            {control.toLowerCase().includes('dashboard') && (
+                              <span css={{ 
+                                marginLeft: '0.5rem',
+                                color: stageInfo.color,
+                                fontSize: '0.8rem'
+                              }}>
+                                (Click to view dashboard)
+                              </span>
+                            )}
                           </Box>
                         ))}
                       </Box>
