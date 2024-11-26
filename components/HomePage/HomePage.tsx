@@ -9,8 +9,7 @@ import { guardrailData } from '../../data/guardrails';
 import { useState, useMemo } from 'react';
 import { Select } from '@ag.ds-next/react/select';
 import { Card } from '@ag.ds-next/react/card';
-import { Tag } from '@ag.ds-next/react/tags';  // Add this import
-import { RiskAssessment } from '../RiskAssessment/RiskAssessment';
+import { Tag } from '@ag.ds-next/react/tags';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -658,23 +657,6 @@ export const HomePage = () => {
               })}
             </div>
           </div>
-        </PageContent>
-      </Box>
-
-      {/* Add Risk Assessment Section */}
-      <Box css={{
-        background: 'linear-gradient(135deg, #f6f8fa 0%, #ffffff 100%)',
-        padding: '4rem 2rem',
-        position: 'relative'
-      }}>
-        <PageContent>
-          <Box css={{ 
-            maxWidth: '1200px', 
-            margin: '0 auto',
-            animation: `${fadeIn} 0.5s ease-out` 
-          }}>
-            <RiskAssessment />
-          </Box>
         </PageContent>
       </Box>
     </AppLayout>
