@@ -546,7 +546,7 @@ const BusinessCasePage = () => {
                   fontSize: '1.4rem'
                 }
               }}>
-                Solution Objectives
+                Usage pattern
               </H2>
               <Box as="ul" css={{ 
                 listStyle: 'none',
