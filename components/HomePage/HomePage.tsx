@@ -130,112 +130,6 @@ export const HomePage = () => {
 
   return (
     <AppLayout>
-      {/* Introduction Section */}
-      <Box css={{ 
-        background: 'linear-gradient(135deg, #f6f8fa 0%, #ffffff 100%)',
-        padding: '3rem 2rem', // Reduced from 6rem
-        borderBottom: '1px solid #E2E8F0',
-        position: 'relative',
-        overflow: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'radial-gradient(circle at 20% 30%, rgba(147, 197, 253, 0.15) 0%, transparent 50%)',
-          zIndex: 0
-        },
-        '&::after': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'radial-gradient(circle at 80% 70%, rgba(199, 210, 254, 0.15) 0%, transparent 50%)',
-          zIndex: 0
-        }
-      }}>
-        <PageContent>
-          <Box css={{
-            maxWidth: '800px', // Reduced from 900px
-            margin: '0 auto',
-            textAlign: 'center',
-            position: 'relative',
-            zIndex: 1
-          }}>
-            <Box css={{
-              marginBottom: '2rem' // Reduced from 3rem
-            }}>
-              <H1 css={{
-                fontSize: ['2rem', '2.5rem', '3rem'], // Reduced sizes
-                fontWeight: '800',
-                marginBottom: '1.5rem', // Reduced from 3rem
-                position: 'relative',
-                paddingBottom: '2rem'
-              }}>
-                <span css={{
-                  background: 'linear-gradient(120deg, #1a365d 0%, #4C51BF 100%)',
-                  backgroundSize: '200% auto',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-                    animation: `${shimmer} 3s linear infinite`,
-                  }
-                }}>
-                  AI Development Risk Management
-                </span>
-                <span css={{
-                  display: 'block',
-                  position: 'absolute',
-                  bottom: '-1rem',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  animation: `${float} 3s ease-in-out infinite`,
-                  fontSize: '2rem',
-                  WebkitTextFillColor: 'initial'
-                }}>
-                  🎯
-                </span>
-              </H1>
-            </Box>
-
-            <Box css={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1rem', // Reduced from 2rem
-              position: 'relative',
-              padding: '1rem' // Reduced from 2rem
-            }}>
-              <Text 
-                as="p" 
-                fontSize="lg" // Changed from xl
-                css={{
-                  color: '#2D3748',
-                  lineHeight: '1.6',
-                  fontWeight: '500',
-                  animation: `${fadeIn} 1s ease-out forwards`,
-                  opacity: 0,
-                  textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-                }}
-              >
-                A structured approach to managing risks in AI development through comprehensive guardrails and controls.
-              </Text>
-            </Box>
-          </Box>
-        </PageContent>
-      </Box>
-
       {/* Enhanced Dashboard Section */}
       <Box css={{
         background: 'linear-gradient(135deg, #1a365d05 0%, #ffffff 100%)',
@@ -267,11 +161,8 @@ export const HomePage = () => {
               fontSize: '2.5rem',
               marginBottom: '1rem'
             }}>
-              Risk Analytics Dashboard
+              Overview of AI Guardrails and Risks Across Development Stages
             </H2>
-            <Text css={{ color: '#4A5568', maxWidth: '600px', margin: '0 auto' }}>
-              Comprehensive overview of AI development risks across all stages
-            </Text>
           </Box>
 
           {/* Enhanced Statistics Cards */}
