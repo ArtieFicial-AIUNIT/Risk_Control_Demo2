@@ -10,7 +10,7 @@ import { useState, useMemo } from 'react';
 import { Select } from '@ag.ds-next/react/select';
 import { Card } from '@ag.ds-next/react/card';
 import { Tag } from '@ag.ds-next/react/tags';  // Add this import
-import { RiskAssessment } from '../RiskAssessment/RiskAssessment';
+import { Button } from '@ag.ds-next/react/button'; // Add this import
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -266,6 +266,21 @@ export const HomePage = () => {
                 Follow our comprehensive 8-stage process to ensure your AI development 
                 journey adheres to best practices and risk management principles.
               </Text>
+            </Box>
+            <Box css={{ marginTop: '2rem' }}>
+              <Button
+                size="large"
+                onClick={() => router.push('/business-case')}
+                css={{
+                  background: 'linear-gradient(135deg, #4C51BF 0%, #1a365d 100%)',
+                  transition: 'transform 0.2s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                Start Your AI Risk Review
+              </Button>
             </Box>
           </Box>
         </PageContent>
@@ -658,23 +673,6 @@ export const HomePage = () => {
               })}
             </div>
           </div>
-        </PageContent>
-      </Box>
-
-      {/* Add Risk Assessment Section */}
-      <Box css={{
-        background: 'linear-gradient(135deg, #f6f8fa 0%, #ffffff 100%)',
-        padding: '4rem 2rem',
-        position: 'relative'
-      }}>
-        <PageContent>
-          <Box css={{ 
-            maxWidth: '1200px', 
-            margin: '0 auto',
-            animation: `${fadeIn} 0.5s ease-out` 
-          }}>
-            <RiskAssessment />
-          </Box>
         </PageContent>
       </Box>
     </AppLayout>
