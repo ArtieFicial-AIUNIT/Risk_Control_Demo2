@@ -99,6 +99,183 @@ export const guardrailData = {
       }
     ]
   },
+  data: {
+    title: 'Data',
+    color: '#48BB78',
+    guardrails: [
+      {
+        name: 'Bias Detection and Mitigation',
+        riskLevel: 'High',
+        risks: [
+          'Biased datasets causing unfair outcomes',
+          'Reinforcement of existing biases in data'
+        ],
+        controls: [
+          'Bias Audits: Analyse data for biases using statistical methods',
+          'Diverse Collection: Ensure datasets are representative of diverse groups and demographics, promoting fairness and reducing the risk of discrimination',
+          'Fairness Techniques: Apply debiasing methods like re-sampling or adversarial debiasing',
+          'Bias Mitigation Techniques: Implement appropriate methods to address and reduce bias, such as re-sampling, data augmentation, or other fairness-enhancing approaches tailored to the specific context of the AI system'
+        ],
+        principles: [
+          'Fairness',
+          'Human-centred values'
+        ]
+      },
+      {
+        name: 'Data Orchestration and Management',
+        riskLevel: 'Medium',
+        risks: [
+          'Inconsistent data handling causing integrity issues',
+          'Data silos impeding comprehensive analysis'
+        ],
+        controls: [
+          'Data Governance: Develop and implement policies and procedures to ensure the proper management, quality, security, and compliance of data throughout its lifecycle. These policies should align with recognised best practices and industry standards to promote accountability and consistency in data handling. For example, establish policies based on standards like ISO/IEC 38505',
+          'Unified Platforms: Use centralised repositories with controlled access to facilitate collaboration and data consistency'
+        ],
+        principles: [
+          'Reliability and safety',
+          'Accountability'
+        ]
+      },
+      {
+        name: 'Indigenous Data Considerations',
+        riskLevel: 'High',
+        risks: [
+          'Cultural insensitivity harming communities',
+          'Violation of rights breaching legal protections'
+        ],
+        controls: [
+          'Engage with Indigenous Communities: Follow the AIATSIS Code of Ethics for respectful engagement',
+          'CARE Principles: Adhere to principles for indigenous data governance, focusing on Collective benefit, Authority to control, Responsibility, and Ethics'
+        ],
+        principles: [
+          'Human-centred values',
+          'Fairness'
+        ]
+      },
+      {
+        name: 'Data Categorisation and Pre-trained Models',
+        riskLevel: 'Medium',
+        risks: [
+          'AI solution results may be inaccurate due to model deficiencies or incorrect logic, leading to poor or incorrect outcomes',
+          'Misclassification impairing accuracy',
+          'Incompatibility with pre-trained models leading to poor performance'
+        ],
+        controls: [
+          'Accurate Labelling: Use standardised taxonomies and labelling protocols',
+          'Model Evaluation: Assess pre-trained models for suitability and adapt them to align with organisational data',
+          'Controls monitor data quality over time (e.g. to detect \'data drift\'), ensuring that learning models are continuously refined based on changing data patterns. Consideration is given to data volume and its impact on learning quality'
+        ],
+        principles: [
+          'Reliability and safety',
+          'Transparency and explainability'
+        ]
+      },
+      {
+        name: 'Data Supply Chain, Lineage, and Metadata',
+        riskLevel: 'Medium',
+        risks: [
+          'Traceability gaps hampering accountability',
+          'Metadata mismanagement leading to misuse'
+        ],
+        controls: [
+          'Data Lineage Tools: Implement systems to track data origins and transformations',
+          'Metadata Standards: Adopt standards like Dublin Core or ISO 23081 for metadata management'
+        ],
+        principles: [
+          'Transparency and explainability',
+          'Accountability'
+        ]
+      }
+    ]
+  },
+  training: {
+    title: 'Training',
+    color: '#ED8936',
+    guardrails: [
+      {
+        name: 'Training Methodology and Human-in-the-Loop',
+        riskLevel: 'Medium',
+        risks: [
+          'Automation errors without human oversight',
+          'Inefficient processes may also increase costs'
+        ],
+        controls: [
+          'Human Oversight: Implement checkpoints where humans review AI outputs to catch errors and make adjustments',
+          'Staged Development: Use iterative development processes for flexibility with human-in-the-loop checks'
+        ],
+        principles: [
+          'Reliability and safety',
+          'Contestability'
+        ]
+      },
+      {
+        name: 'Bias Detection During Training',
+        riskLevel: 'High',
+        risks: [
+          'Model bias causing discriminatory decisions',
+          'Unfair outcomes affecting certain groups'
+        ],
+        controls: [
+          'Fairness Metrics: Apply statistical measures like disparate impact ratio',
+          'Regular Monitoring: Continuously assess models during training for bias and adjust as necessary'
+        ],
+        principles: [
+          'Fairness',
+          'Human-centred values'
+        ]
+      },
+      {
+        name: 'Techniques and Learning Types',
+        riskLevel: 'Medium',
+        risks: [
+          'Misapplied algorithms not solving the problem',
+          'Overfitting or underfitting causing poor generalisation'
+        ],
+        controls: [
+          'Algorithm Selection: Choose algorithms based on data characteristics and problem requirements',
+          'Cross-Validation: Use methods like k-fold cross-validation to assess model performance and prevent overfitting'
+        ],
+        principles: [
+          'Reliability and safety',
+          'Transparency and explainability'
+        ]
+      },
+      {
+        name: 'Cost and Compute Resources',
+        riskLevel: 'Medium',
+        risks: [
+          'Budget overruns exceeding allocated funds',
+          'Environmental impact from high compute resource consumption'
+        ],
+        controls: [
+          'Resource Optimisation: Use efficient algorithms and hardware to reduce computational load',
+          'Cost Monitoring: Track compute costs in real-time to stay within budget',
+          'Green Computing Practices: Implement energy-efficient computing to minimise environmental impact'
+        ],
+        principles: [
+          'Human, social and environmental wellbeing',
+          'Reliability and safety'
+        ]
+      },
+      {
+        name: 'Specialist Knowledge and Reinforcement Learning',
+        riskLevel: 'Medium',
+        risks: [
+          'Complexity requiring specialised expertise',
+          'Unpredictable behaviour from reinforcement learning agents'
+        ],
+        controls: [
+          'Expert Involvement: Include AI specialists and domain experts in the development team',
+          'Safety Constraints: Set operational boundaries and fail-safes within the AI system to prevent undesirable behaviour'
+        ],
+        principles: [
+          'Reliability and safety',
+          'Accountability'
+        ]
+      }
+    ]
+  },
   test: {
     title: 'Test',
     color: '#9F7AEA',
@@ -247,183 +424,5 @@ export const guardrailData = {
         ]
       }
     ]
-  },
-  training: {
-    title: 'Training',
-    color: '#ED8936',
-    guardrails: [
-      {
-        name: 'Training Methodology and Human-in-the-Loop',
-        riskLevel: 'Medium',
-        risks: [
-          'Automation errors without human oversight',
-          'Inefficient processes may also increase costs'
-        ],
-        controls: [
-          'Human Oversight: Implement checkpoints where humans review AI outputs to catch errors and make adjustments',
-          'Staged Development: Use iterative development processes for flexibility with human-in-the-loop checks'
-        ],
-        principles: [
-          'Reliability and safety',
-          'Contestability'
-        ]
-      },
-      {
-        name: 'Bias Detection During Training',
-        riskLevel: 'High',
-        risks: [
-          'Model bias causing discriminatory decisions',
-          'Unfair outcomes affecting certain groups'
-        ],
-        controls: [
-          'Fairness Metrics: Apply statistical measures like disparate impact ratio',
-          'Regular Monitoring: Continuously assess models during training for bias and adjust as necessary'
-        ],
-        principles: [
-          'Fairness',
-          'Human-centred values'
-        ]
-      },
-      {
-        name: 'Techniques and Learning Types',
-        riskLevel: 'Medium',
-        risks: [
-          'Misapplied algorithms not solving the problem',
-          'Overfitting or underfitting causing poor generalisation'
-        ],
-        controls: [
-          'Algorithm Selection: Choose algorithms based on data characteristics and problem requirements',
-          'Cross-Validation: Use methods like k-fold cross-validation to assess model performance and prevent overfitting'
-        ],
-        principles: [
-          'Reliability and safety',
-          'Transparency and explainability'
-        ]
-      },
-      {
-        name: 'Cost and Compute Resources',
-        riskLevel: 'Medium',
-        risks: [
-          'Budget overruns exceeding allocated funds',
-          'Environmental impact from high compute resource consumption'
-        ],
-        controls: [
-          'Resource Optimisation: Use efficient algorithms and hardware to reduce computational load',
-          'Cost Monitoring: Track compute costs in real-time to stay within budget',
-          'Green Computing Practices: Implement energy-efficient computing to minimise environmental impact'
-        ],
-        principles: [
-          'Human, social and environmental wellbeing',
-          'Reliability and safety'
-        ]
-      },
-      {
-        name: 'Specialist Knowledge and Reinforcement Learning',
-        riskLevel: 'Medium',
-        risks: [
-          'Complexity requiring specialised expertise',
-          'Unpredictable behaviour from reinforcement learning agents'
-        ],
-        controls: [
-          'Expert Involvement: Include AI specialists and domain experts in the development team',
-          'Safety Constraints: Set operational boundaries and fail-safes within the AI system to prevent undesirable behaviour'
-        ],
-        principles: [
-          'Reliability and safety',
-          'Accountability'
-        ]
-      }
-    ]
-  },
-  data: {
-    title: 'Data',
-    color: '#48BB78',
-    guardrails: [
-      {
-        name: 'Bias Detection and Mitigation',
-        riskLevel: 'High',
-        risks: [
-          'Biased datasets causing unfair outcomes',
-          'Reinforcement of existing biases in data'
-        ],
-        controls: [
-          'Bias Audits: Analyse data for biases using statistical methods',
-          'Diverse Collection: Ensure datasets are representative of diverse groups and demographics, promoting fairness and reducing the risk of discrimination',
-          'Fairness Techniques: Apply debiasing methods like re-sampling or adversarial debiasing',
-          'Bias Mitigation Techniques: Implement appropriate methods to address and reduce bias, such as re-sampling, data augmentation, or other fairness-enhancing approaches tailored to the specific context of the AI system'
-        ],
-        principles: [
-          'Fairness',
-          'Human-centred values'
-        ]
-      },
-      {
-        name: 'Data Orchestration and Management',
-        riskLevel: 'Medium',
-        risks: [
-          'Inconsistent data handling causing integrity issues',
-          'Data silos impeding comprehensive analysis'
-        ],
-        controls: [
-          'Data Governance: Develop and implement policies and procedures to ensure the proper management, quality, security, and compliance of data throughout its lifecycle. These policies should align with recognised best practices and industry standards to promote accountability and consistency in data handling. For example, establish policies based on standards like ISO/IEC 38505',
-          'Unified Platforms: Use centralised repositories with controlled access to facilitate collaboration and data consistency'
-        ],
-        principles: [
-          'Reliability and safety',
-          'Accountability'
-        ]
-      },
-      {
-        name: 'Indigenous Data Considerations',
-        riskLevel: 'High',
-        risks: [
-          'Cultural insensitivity harming communities',
-          'Violation of rights breaching legal protections'
-        ],
-        controls: [
-          'Engage with Indigenous Communities: Follow the AIATSIS Code of Ethics for respectful engagement',
-          'CARE Principles: Adhere to principles for indigenous data governance, focusing on Collective benefit, Authority to control, Responsibility, and Ethics'
-        ],
-        principles: [
-          'Human-centred values',
-          'Fairness'
-        ]
-      },
-      {
-        name: 'Data Categorisation and Pre-trained Models',
-        riskLevel: 'Medium',
-        risks: [
-          'AI solution results may be inaccurate due to model deficiencies or incorrect logic, leading to poor or incorrect outcomes',
-          'Misclassification impairing accuracy',
-          'Incompatibility with pre-trained models leading to poor performance'
-        ],
-        controls: [
-          'Accurate Labelling: Use standardised taxonomies and labelling protocols',
-          'Model Evaluation: Assess pre-trained models for suitability and adapt them to align with organisational data',
-          'Controls monitor data quality over time (e.g. to detect \'data drift\'), ensuring that learning models are continuously refined based on changing data patterns. Consideration is given to data volume and its impact on learning quality'
-        ],
-        principles: [
-          'Reliability and safety',
-          'Transparency and explainability'
-        ]
-      },
-      {
-        name: 'Data Supply Chain, Lineage, and Metadata',
-        riskLevel: 'Medium',
-        risks: [
-          'Traceability gaps hampering accountability',
-          'Metadata mismanagement leading to misuse'
-        ],
-        controls: [
-          'Data Lineage Tools: Implement systems to track data origins and transformations',
-          'Metadata Standards: Adopt standards like Dublin Core or ISO 23081 for metadata management'
-        ],
-        principles: [
-          'Transparency and explainability',
-          'Accountability'
-        ]
-      }
-    ]
   }
-  // Add other stages as needed
 };

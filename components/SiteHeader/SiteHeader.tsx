@@ -28,8 +28,8 @@ export const SiteHeader = () => {
         css={headerStyles}
         background="bodyAlt"
         logo={<Logo />}
-        heading="AI Risk and Control Framework"
-        subline="Navigate the journey of AI product development with a guided risk management tool"
+        heading="AI Guardrail Framework"
+        subline="Structured guidance for safe AI development"
         badgeLabel="Beta"
       />
       <MainNav

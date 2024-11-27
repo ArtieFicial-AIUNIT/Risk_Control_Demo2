@@ -1,3 +1,4 @@
+
 import { PageContent } from '@ag.ds-next/react/content'; 
 import { Box } from '@ag.ds-next/react/box';
 import { Text } from '@ag.ds-next/react/text';
@@ -9,7 +10,7 @@ import { guardrailData } from '../../data/guardrails';
 import { useState, useMemo } from 'react';
 import { Select } from '@ag.ds-next/react/select';
 import { Card } from '@ag.ds-next/react/card';
-import { Tag } from '@ag.ds-next/react/tags';
+import { Tag } from '@ag.ds-next/react/tags';  // Add this import
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -133,7 +134,7 @@ export const HomePage = () => {
       {/* Introduction Section */}
       <Box css={{ 
         background: 'linear-gradient(135deg, #f6f8fa 0%, #ffffff 100%)',
-        padding: '3rem 2rem', // Reduced from 6rem
+        padding: '6rem 2rem',
         borderBottom: '1px solid #E2E8F0',
         position: 'relative',
         overflow: 'hidden',
@@ -160,19 +161,20 @@ export const HomePage = () => {
       }}>
         <PageContent>
           <Box css={{
-            maxWidth: '800px', // Reduced from 900px
+            maxWidth: '900px',
             margin: '0 auto',
             textAlign: 'center',
             position: 'relative',
             zIndex: 1
           }}>
             <Box css={{
-              marginBottom: '2rem' // Reduced from 3rem
+              marginBottom: '3rem',
+              position: 'relative'
             }}>
               <H1 css={{
-                fontSize: ['2rem', '2.5rem', '3rem'], // Reduced sizes
+                fontSize: ['2.5rem', '3.5rem', '4rem'],
                 fontWeight: '800',
-                marginBottom: '1.5rem', // Reduced from 3rem
+                marginBottom: '3rem',
                 position: 'relative',
                 paddingBottom: '2rem'
               }}>
@@ -193,7 +195,7 @@ export const HomePage = () => {
                     animation: `${shimmer} 3s linear infinite`,
                   }
                 }}>
-                  AI Development Risk Management
+                  Navigate AI Development with Confidence
                 </span>
                 <span css={{
                   display: 'block',
@@ -213,23 +215,56 @@ export const HomePage = () => {
             <Box css={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem', // Reduced from 2rem
+              gap: '2rem',
               position: 'relative',
-              padding: '1rem' // Reduced from 2rem
+              padding: '2rem',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: '10%',
+                right: '10%',
+                height: '1px',
+                background: 'linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent)'
+              }
             }}>
               <Text 
                 as="p" 
-                fontSize="lg" // Changed from xl
+                fontSize="xl"
                 css={{
                   color: '#2D3748',
-                  lineHeight: '1.6',
+                  lineHeight: '1.8',
                   fontWeight: '500',
                   animation: `${fadeIn} 1s ease-out forwards`,
                   opacity: 0,
                   textShadow: '0 1px 2px rgba(0,0,0,0.1)'
                 }}
               >
-                A structured approach to managing risks in AI development through comprehensive guardrails and controls.
+                Our AI Risk and Control Framework provides a structured approach to developing safe, 
+                ethical, and reliable AI solutions. From initial design to deployment and monitoring, 
+                we guide you through each critical stage.
+              </Text>
+              <Text 
+                as="p"
+                css={{
+                  color: '#4A5568',
+                  lineHeight: '1.8',
+                  animation: `${fadeIn} 1s ease-out forwards`,
+                  opacity: 0,
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-1rem',
+                    left: '35%',
+                    right: '35%',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent)'
+                  }
+                }}
+              >
+                Follow our comprehensive 8-stage process to ensure your AI development 
+                journey adheres to best practices and risk management principles.
               </Text>
             </Box>
           </Box>

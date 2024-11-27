@@ -8,11 +8,17 @@ import { Button } from '@ag.ds-next/react/button';
 import { Box } from '@ag.ds-next/react/box';
 import { Text } from '@ag.ds-next/react/text';
 import { Card } from '@ag.ds-next/react/card';
+import { Tag } from '@ag.ds-next/react/tags';
 import { useRouter } from 'next/router';
 import { keyframes } from '@emotion/react';
 import { Checkbox } from '@ag.ds-next/react/checkbox';
-import { Modal } from '@ag.ds-next/react/modal';
 import { guardrailData } from '../data/guardrails';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Modal with no SSR
+const Modal = dynamic(() => import('@ag.ds-next/react/modal').then(mod => mod.Modal), {
+  ssr: false
+});
 
 // Animations
 const fadeIn = keyframes`
@@ -32,20 +38,14 @@ const pulse = keyframes`
 `;
 
 const BusinessCasePage = () => {
-  const [businessCase, setBusinessCase] = useState('');
+  const [businessCase, setBusinessCase] = useState<string>(
+    "This project employs generative AI to streamline the process of accessing regulatory information for biosecurity importation conditions. Simplify compliance with Australian biosecurity and safety standards, thus supporting trade and safeguarding the nation's biosecurity. The implementation to incorporate publicly available data and text to improve the processing and dissemination of complex import conditions."
+  );
   const [error, setError] = useState('');
-  const [selectedStages, setSelectedStages] = useState<string[]>([]);
+  const [selectedStages, setSelectedStages] = useState<string[]>(['design', 'data', 'training']);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [showAllStagesPrompt, setShowAllStagesPrompt] = useState(false);
+  const [showUsagePattern, setShowUsagePattern] = useState(false); // Changed to false initially
   const router = useRouter();
-
-  const handleStageToggle = (stage: string) => {
-    setSelectedStages(prev => 
-      prev.includes(stage) 
-        ? prev.filter(s => s !== stage)
-        : [...prev, stage]
-    );
-  };
 
   const handleSubmit = () => {
     if (businessCase.trim().length === 0) {
@@ -63,23 +63,32 @@ const BusinessCasePage = () => {
       return;
     }
 
-    setShowConfirmation(true);
+    setShowUsagePattern(true); // Show usage pattern modal after validation
+  };
+
+  const handleStageToggle = (stage: string) => {
+    setSelectedStages(prev => 
+      prev.includes(stage) 
+        ? prev.filter(s => s !== stage)
+        : [...prev, stage]
+    );
+    setShowUsagePattern(false); // Hide modal when changing stages
   };
 
   const handleProceed = () => {
-    setShowConfirmation(false);
-    setShowAllStagesPrompt(true);
+    handleFinalNavigation();
   };
 
-  const handleFinalNavigation = (showAll: boolean) => {
-    if (showAll) {
-      router.push('/assessment');
-    } else {
-      router.push({
-        pathname: '/assessment',
-        query: { stages: selectedStages.join(',') }
-      });
-    }
+  const handleFinalNavigation = () => {
+    router.push({
+      pathname: '/assessment',
+      query: { stages: selectedStages.join(',') }
+    });
+  };
+
+  const handleUsagePatternConfirm = () => {
+    setShowUsagePattern(false);
+    setShowConfirmation(true);
   };
 
   const wordCount = businessCase.trim().split(/\s+/).length;
@@ -227,22 +236,24 @@ const BusinessCasePage = () => {
                   gap: '1rem'
                 }}>
                   {Object.entries(guardrailData).map(([stage, data]) => (
-                    <Card key={stage} css={{
-                      padding: '1rem',
-                      background: selectedStages.includes(stage) ? 'rgba(76, 81, 191, 0.1)' : 'white',
-                      border: `1px solid ${selectedStages.includes(stage) ? '#4C51BF' : '#E2E8F0'}`,
-                      borderRadius: '8px',
-                      transition: 'all 0.3s ease',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1rem',
-                      '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 4px 12px rgba(76, 81, 191, 0.1)'
-                      }
-                    }}
-                    onClick={() => handleStageToggle(stage)}
+                    <Card 
+                      key={stage} 
+                      css={{
+                        padding: '1rem',
+                        background: selectedStages.includes(stage) ? 'rgba(76, 81, 191, 0.1)' : 'white',
+                        border: `1px solid ${selectedStages.includes(stage) ? '#4C51BF' : '#E2E8F0'}`,
+                        borderRadius: '8px',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        '&:hover': {
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 4px 12px rgba(76, 81, 191, 0.1)'
+                        }
+                      }}
+                      onClick={() => handleStageToggle(stage)}
                     >
                       <Checkbox
                         checked={selectedStages.includes(stage)}
@@ -457,26 +468,278 @@ const BusinessCasePage = () => {
         </PageContent>
       </Box>
 
+      {/* Usage Pattern Modal */}
+      <Modal
+        isOpen={showUsagePattern}
+        onClose={() => null} // Remove close functionality from modal
+        title={
+          <Box css={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%'
+          }}>
+            <H2 css={{ 
+              fontSize: '1.5rem',
+              margin: 0,
+              background: 'linear-gradient(120deg, #1a365d, #4C51BF)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>
+              Review Solution Details
+            </H2>
+            <Button
+              variant="text"
+              onClick={() => setShowUsagePattern(false)}
+              css={{ color: '#4A5568' }}
+            >
+            
+            </Button>
+          </Box>
+        }
+      >
+        <Box css={{ 
+          maxHeight: '70vh', 
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#F7FAFC',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#CBD5E0',
+            borderRadius: '4px',
+            '&:hover': {
+              background: '#A0AEC0'
+            }
+          }
+        }}>
+          <Box css={{ 
+            marginBottom: '2rem',
+            animation: `${fadeIn} 0.3s ease-out`
+          }}>
+            <Card css={{ 
+              padding: '2rem',
+              marginBottom: '2rem', 
+              background: 'white',
+              borderRadius: '16px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+              border: '1px solid rgba(76, 81, 191, 0.1)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 8px 24px rgba(76, 81, 191, 0.1)'
+              }
+            }}>
+              <H2 css={{ 
+                fontSize: '1.2rem',
+                marginBottom: '1.5rem', 
+                color: '#1a365d',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                '&::before': {
+                  content: '"📋"',
+                  fontSize: '1.4rem'
+                }
+              }}>
+                Solution Objectives
+              </H2>
+              <Box as="ul" css={{ 
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                display: 'grid',
+                gap: '1.5rem',
+                '& > li': {
+                  padding: '1.5rem',
+                  background: '#F7FAFC',
+                  borderRadius: '12px',
+                  border: '1px solid rgba(76, 81, 191, 0.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateX(4px)',
+                    boxShadow: '0 4px 12px rgba(76, 81, 191, 0.05)'
+                  }
+                }
+              }}>
+                <li>
+                  <Text css={{ fontWeight: 'bold', color: '#2D3748' }}>Service Delivery: </Text>
+                  <Text>Solution aims to improve the processing and dissemination of complex export/import conditions, which can automate and streamline workflows, enhance communication, and support decision-making processes.</Text>
+                </li>
+                <li>
+                  <Text css={{ fontWeight: 'bold', color: '#2D3748' }}>Analytics for Insights: </Text>
+                  <Text>The generative AI can analyse and synthesise publicly available data and text to provide insights and generate relevant information for stakeholders.</Text>
+                </li>
+                <li>
+                  <Text css={{ fontWeight: 'bold', color: '#2D3748' }}>Decision Making and Administrative Action: </Text>
+                  <Text>The solution provides recommendations on import conditions.</Text>
+                </li>
+                <li>
+                  <Text css={{ fontWeight: 'bold', color: '#2D3748' }}>Policy and Legal: </Text>
+                  <Text>The solutions support the analysis of policies and legal documents related to export/import conditions, providing advice and assurance on their impact and ensuring consistency with existing laws.</Text>
+                </li>
+              </Box>
+            </Card>
+          </Box>
+          
+          <Box css={{ 
+            display: 'flex', 
+            justifyContent: 'flex-end', 
+            gap: '1rem', 
+            marginTop: '2rem',
+            borderTop: '1px solid #E2E8F0',
+            paddingTop: '1.5rem'
+          }}>
+            <Button 
+              onClick={handleUsagePatternConfirm}
+              css={{
+                background: 'linear-gradient(135deg, #4C51BF, #6B46C1)',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 4px 12px rgba(76, 81, 191, 0.3)'
+                }
+              }}
+            >
+              Continue to Risk Analysis
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+
       {/* Confirmation Modal */}
       <Modal
         isOpen={showConfirmation}
         onClose={() => setShowConfirmation(false)}
-        title="Important Risk Considerations"
+        title={
+          <Box css={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%'
+          }}>
+            <H2 css={{ 
+              fontSize: '1.5rem',
+              margin: 0,
+              background: 'linear-gradient(120deg, #E53E3E, #F56565)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              '&::before': {
+                content: '"⚠️"',
+                fontSize: '1.4rem',
+                WebkitTextFillColor: 'initial'
+              }
+            }}>Important Risk Considerations</H2>
+            <Button
+              variant="text"
+              onClick={() => setShowConfirmation(false)}
+              css={{ color: '#4A5568' }}
+            ></Button>
+          </Box>
+        }
       >
-        <Box css={{ maxHeight: '70vh', overflowY: 'auto' }}>
-          <Text css={{ marginBottom: '2rem' }}>
-            Before proceeding, please consider the following risks associated with your selected stages:
-          </Text>
+        <Box css={{ 
+          maxHeight: '70vh', 
+          overflowY: 'auto',
+          padding: '1rem',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#F7FAFC',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#CBD5E0',
+            borderRadius: '4px',
+            '&:hover': {
+              background: '#A0AEC0'
+            }
+          }
+        }}>
+         
           
           {selectedStages.map(stage => (
-            <Box key={stage} css={{ marginBottom: '2rem' }}>
-              <H2 css={{ color: guardrailData[stage].color }}>{guardrailData[stage].title}</H2>
+            <Box key={stage} css={{ 
+              marginBottom: '2rem',
+              animation: `${fadeIn} 0.3s ease-out`
+            }}>
+              <H2 css={{ 
+                color: guardrailData[stage].color,
+                fontSize: '1.4rem',
+                marginBottom: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                '&::after': {
+                  content: '""',
+                  flex: 1,
+                  height: '2px',
+                  background: `linear-gradient(90deg, ${guardrailData[stage].color}20, transparent)`
+                }
+              }}>{guardrailData[stage].title}</H2>
               {guardrailData[stage].guardrails.map((guardrail, index) => (
-                <Card key={index} css={{ marginTop: '1rem', padding: '1rem' }}>
-                  <Text weight="bold">{guardrail.name}</Text>
-                  <Box as="ul" css={{ marginTop: '0.5rem' }}>
+                <Card key={index} css={{ 
+                  marginTop: '1rem',
+                  padding: '1.5rem',
+                  border: '1px solid rgba(76, 81, 191, 0.1)',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                  borderRadius: '12px',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 24px rgba(76, 81, 191, 0.1)'
+                  }
+                }}>
+                  <Text weight="bold" css={{ 
+                    fontSize: '1.1rem',
+                    color: '#2D3748',
+                    marginBottom: '1rem',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    {guardrail.name}
+                    <Tag css={{
+                      background: guardrail.riskLevel === 'High' ? '#FED7D7' 
+                        : guardrail.riskLevel === 'Medium' ? '#FEEBC8' 
+                        : '#C6F6D5',
+                      color: guardrail.riskLevel === 'High' ? '#C53030'
+                        : guardrail.riskLevel === 'Medium' ? '#C05621'
+                        : '#2F855A'
+                    }}>
+                      {guardrail.riskLevel} Risk
+                    </Tag>
+                  </Text>
+                  <Box as="ul" css={{ 
+                    marginTop: '0.5rem',
+                    listStyle: 'none',
+                    padding: 0
+                  }}>
                     {guardrail.risks.map((risk, rIndex) => (
-                      <Box as="li" key={rIndex} css={{ marginBottom: '0.5rem' }}>
+                      <Box as="li" key={rIndex} css={{ 
+                        marginBottom: '0.75rem',
+                        paddingLeft: '1.5rem',
+                        position: 'relative',
+                        color: '#4A5568',
+                        lineHeight: '1.6',
+                        '&::before': {
+                          content: '"•"',
+                          position: 'absolute',
+                          left: 0,
+                          color: guardrailData[stage].color,
+                          fontWeight: 'bold'
+                        }
+                      }}>
                         {risk}
                       </Box>
                     ))}
@@ -486,37 +749,60 @@ const BusinessCasePage = () => {
             </Box>
           ))}
           
-          <Box css={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
-            <Button variant="secondary" onClick={() => setShowConfirmation(false)}>
-              Review Business Case
+          {/* Modal Footer with Buttons */}
+          <Box css={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            gap: '1rem', 
+            marginTop: '2rem',
+            borderTop: '1px solid #E2E8F0',
+            paddingTop: '1.5rem'
+          }}>
+            <Button variant="secondary" onClick={() => {
+              setShowConfirmation(false);
+              setShowUsagePattern(true);
+            }}>
+              Back
             </Button>
-            <Button onClick={handleProceed}>
-              I Understand the Risks
-            </Button>
+            <Box css={{ display: 'flex', gap: '1rem' }}>
+              <Button variant="secondary" onClick={() => setShowConfirmation(false)}>
+                Close
+              </Button>
+              <Button 
+                variant="secondary" 
+                onClick={() => router.push('/assessment')}
+                css={{
+                  background: '#F7FAFC',
+                  borderColor: '#4C51BF',
+                  color: '#4C51BF',
+                  '&:hover': {
+                    background: '#EDF2F7',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(76, 81, 191, 0.1)'
+                  }
+                }}
+              >
+                Complete Risk Assessment Report
+              </Button>
+              <Button 
+                onClick={handleProceed}
+                css={{
+                  background: 'linear-gradient(135deg, #4C51BF, #6B46C1)',
+                  borderRadius: '8px',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(76, 81, 191, 0.3)'
+                  }
+                }}
+              >
+                Continue with Selected Stages
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Modal>
-
-      {/* All Stages Prompt Modal */}
-      <Modal
-        isOpen={showAllStagesPrompt}
-        onClose={() => setShowAllStagesPrompt(false)}
-        title="Explore More Stages?"
-      >
-        <Text css={{ marginBottom: '2rem' }}>
-          Would you like to explore risks and guardrails associated with other AI development stages?
-        </Text>
-        <Box css={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-          <Button variant="secondary" onClick={() => handleFinalNavigation(false)}>
-            Continue with Selected Stages
-          </Button>
-          <Button onClick={() => handleFinalNavigation(true)}>
-            Show All Stages
-          </Button>
         </Box>
       </Modal>
     </AppLayout>
   );
 };
-
 export default BusinessCasePage;

@@ -9,6 +9,7 @@ import { Tag } from '@ag.ds-next/react/tags';
 import { Checkbox } from '@ag.ds-next/react/checkbox';
 import { guardrailData } from '../../data/guardrails';
 import { Modal } from '@ag.ds-next/react/modal';
+import { useRouter } from 'next/router';
 
 interface RiskScore {
   stage: string;
@@ -20,7 +21,21 @@ interface RiskScore {
 }
 
 export const RiskAssessment = () => {
-  const [currentStage, setCurrentStage] = useState<string>(Object.keys(guardrailData)[0]);
+  const router = useRouter();
+  const { stages: stageParam } = router.query;
+  
+  // Parse stages from URL or use all stages
+  const availableStages = useMemo(() => {
+    if (stageParam) {
+      const stageList = (stageParam as string).split(',');
+      return Object.fromEntries(
+        Object.entries(guardrailData).filter(([key]) => stageList.includes(key))
+      );
+    }
+    return guardrailData;
+  }, [stageParam]);
+
+  const [currentStage, setCurrentStage] = useState<string>(Object.keys(availableStages)[0]);
   const [scores, setScores] = useState<RiskScore[]>([]);
   const [checkedGuardrails, setCheckedGuardrails] = useState<Record<string, boolean>>({});
   const [showSummary, setShowSummary] = useState(false);
@@ -290,6 +305,20 @@ export const RiskAssessment = () => {
           <Box css={{ marginBottom: '2rem', textAlign: 'center' }}>
             <H2>AI Risk Assessment Wizard</H2>
             <Text>Check the guardrails you have considered in your AI system</Text>
+            <Text css={{ color: '#4A5568', marginTop: '1rem' }}>
+              {Object.keys(availableStages).length < Object.keys(guardrailData).length ? (
+                <span>
+                  Showing selected stages. Want to see all stages? 
+                  <Button 
+                    variant="text"
+                    onClick={() => router.push('/assessment')}
+                    css={{ marginLeft: '0.5rem', color: '#4C51BF' }}
+                  >
+                    View Complete Lifecycle
+                  </Button>
+                </span>
+              ) : null}
+            </Text>
             <Box css={{ marginTop: '1rem' }}>
               <ProgressBar 
                 value={(Object.keys(guardrailData).indexOf(currentStage) + 1) / Object.keys(guardrailData).length * 100}
