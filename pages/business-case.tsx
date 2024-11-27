@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppLayout } from '../components/AppLayout';
 import { PageContent } from '@ag.ds-next/react/content';
 import { DocumentTitle } from '../components/DocumentTitle';
@@ -33,9 +33,15 @@ const BusinessCasePage: React.FC<BusinessCasePageProps> = () => {
 
   const handleSubmit = () => {
     if (businessCase.length >= 50 && selectedStages.length > 0) {
+      console.log('Opening modal with stages:', selectedStages);
       setShowRiskModal(true);
     }
   };
+
+  // Debugging helper
+  useEffect(() => {
+    console.log('Selected stages:', selectedStages);
+  }, [selectedStages]);
 
   const handleContinue = () => {
     setShowRiskModal(false);
@@ -109,7 +115,7 @@ const BusinessCasePage: React.FC<BusinessCasePageProps> = () => {
               onClick={handleSubmit}
               disabled={businessCase.length < 50 || selectedStages.length === 0}
             >
-              Review Risks
+              Review Risks ({selectedStages.length} stages selected)
             </Button>
           </Card>
 
@@ -118,6 +124,27 @@ const BusinessCasePage: React.FC<BusinessCasePageProps> = () => {
             isOpen={showRiskModal}
             onClose={() => setShowRiskModal(false)}
             title="Risk Consideration"
+            css={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1000,
+              '.modalContent': {
+                maxWidth: '800px',
+                width: '90vw',
+                maxHeight: '90vh',
+                overflowY: 'auto',
+                background: 'white',
+                position: 'relative',
+                zIndex: 1001,
+                margin: '2rem auto',
+                padding: '2rem',
+                borderRadius: '8px',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+              }
+            }}
           >
             <Box css={{ maxWidth: '800px' }}>
               <H2>Before proceeding, consider these risks:</H2>
