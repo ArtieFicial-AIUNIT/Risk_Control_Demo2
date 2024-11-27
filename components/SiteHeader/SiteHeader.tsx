@@ -16,8 +16,8 @@ const headerStyles = css`
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
+  { label: 'Business Case', href: '/business-case' },
   { label: 'Risk Assessment', href: '/assessment' }
-  // Removed Business Case Analyzer link
 ];
 
 export const SiteHeader = () => {
