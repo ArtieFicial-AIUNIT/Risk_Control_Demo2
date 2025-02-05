@@ -92,14 +92,18 @@ const GuardrailAIPage = () => {
     }
   };
 
+  // Calculate totals
+  const totalViolations = Object.values(violationTypes).reduce((sum, type) => sum + type.violations, 0);
+  const totalUsage = 1250; // Example total usage number
+
   return (
     <AppLayout>
       <DocumentTitle title="Guardrail AI Monitoring" />
       <PageContent>
         <Box css={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
-          {/* Updated Header with IAIC Description */}
+          {/* Header */}
           <Box css={{
-            marginBottom: '3rem',
+            marginBottom: '2rem',
             padding: '2.5rem 2rem',
             background: 'linear-gradient(135deg, #f6f8fc 0%, #f0f4f8 100%)',
             borderRadius: '12px',
@@ -134,6 +138,157 @@ const GuardrailAIPage = () => {
                 Information Assistant for Import Condition (IAIC)
               </Text>
             </Box>
+          </Box>
+
+          {/* New Stats Cards Section */}
+          <Box css={{ 
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '2rem',
+            margin: '2rem auto 3rem',
+            maxWidth: '1000px'
+          }}>
+            <Card css={{
+              padding: '2rem',
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              boxShadow: '0 4px 6px rgba(76, 81, 191, 0.1)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              overflow: 'hidden',
+              position: 'relative',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 12px 20px rgba(76, 81, 191, 0.15)'
+              },
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '4px',
+                background: 'linear-gradient(90deg, #4C51BF, #6B46C1)'
+              }
+            }}>
+              <Box css={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <Box>
+                  <Text css={{ 
+                    fontSize: '3rem', 
+                    fontWeight: 'bold',
+                    color: '#4C51BF',
+                    lineHeight: '1',
+                    marginBottom: '0.5rem'
+                  }}>
+                    {totalUsage}
+                  </Text>
+                  <Text css={{ 
+                    fontSize: '1.1rem',
+                    color: '#4A5568',
+                    letterSpacing: '0.05em'
+                  }}>
+                    Total IAIC Usage
+                  </Text>
+                </Box>
+                <Box css={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '12px',
+                  background: '#4C51BF10',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#4C51BF'
+                }}>
+                  {/* Add icon here if needed */}
+                </Box>
+              </Box>
+              <Box css={{
+                marginTop: '1.5rem',
+                padding: '0.75rem',
+                background: '#F7FAFC',
+                borderRadius: '8px',
+                fontSize: '0.875rem',
+                color: '#718096'
+              }}>
+                Daily active users: {Math.round(totalUsage/30)}
+              </Box>
+            </Card>
+
+            <Card css={{
+              padding: '2rem',
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              boxShadow: '0 4px 6px rgba(245, 101, 101, 0.1)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              overflow: 'hidden',
+              position: 'relative',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 12px 20px rgba(245, 101, 101, 0.15)'
+              },
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '4px',
+                background: 'linear-gradient(90deg, #F56565, #C53030)'
+              }
+            }}>
+              <Box css={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <Box>
+                  <Text css={{ 
+                    fontSize: '3rem', 
+                    fontWeight: 'bold',
+                    color: '#F56565',
+                    lineHeight: '1',
+                    marginBottom: '0.5rem'
+                  }}>
+                    {totalViolations}
+                  </Text>
+                  <Text css={{ 
+                    fontSize: '1.1rem',
+                    color: '#4A5568',
+                    letterSpacing: '0.05em'
+                  }}>
+                    Total Violations
+                  </Text>
+                </Box>
+                <Box css={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '12px',
+                  background: '#F5656510',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#F56565'
+                }}>
+                  {/* Add icon here if needed */}
+                </Box>
+              </Box>
+              <Box css={{
+                marginTop: '1.5rem',
+                padding: '0.75rem',
+                background: '#F7FAFC',
+                borderRadius: '8px',
+                fontSize: '0.875rem',
+                color: '#718096'
+              }}>
+                Violation rate: {((totalViolations/totalUsage) * 100).toFixed(1)}%
+              </Box>
+            </Card>
           </Box>
 
           {/* Violation Summary Card */}
@@ -221,7 +376,7 @@ const GuardrailAIPage = () => {
                         overflow: 'hidden'
                       }}>
                         <Box css={{
-                          width: `${(data.violations / 15) * 100}%`,
+                          width: `${(data.violations / totalViolations) * 100}%`,
                           height: '100%',
                           background: data.color,
                           transition: 'width 0.3s ease',
@@ -236,7 +391,7 @@ const GuardrailAIPage = () => {
                         fontSize: '0.875rem',
                         fontWeight: '600'
                       }}>
-                        {data.violations}
+                        {data.violations}/{totalViolations}
                       </Box>
                     </Box>
                   </Box>
