@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppLayout } from '../components/AppLayout';
-import { PageContent } from '@ag.ds-next/react/content'; // Fixed typo in import
+import { PageContent } from '@ag.ds-next/react/content';
 import { DocumentTitle } from '../components/DocumentTitle';
 import { Box } from '@ag.ds-next/react/box';
 import { H1, H2 } from '@ag.ds-next/react/heading';
@@ -12,6 +12,10 @@ const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 `;
+
+const formatNumber = (num: number) => {
+  return num.toLocaleString();
+};
 
 const GuardrailAIPage = () => {
   const violationTypes = {
@@ -184,7 +188,7 @@ const GuardrailAIPage = () => {
                     lineHeight: '1',
                     marginBottom: '0.5rem'
                   }}>
-                    {totalUsage}
+                    {formatNumber(totalUsage)}
                   </Text>
                   <Text css={{ 
                     fontSize: '1.1rem',
@@ -194,17 +198,46 @@ const GuardrailAIPage = () => {
                     Total IAIC Usage
                   </Text>
                 </Box>
+                {/* Custom Usage Icon */}
                 <Box css={{
                   width: '60px',
                   height: '60px',
                   borderRadius: '12px',
-                  background: '#4C51BF10',
+                  background: '#4C51BF15',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#4C51BF'
+                  position: 'relative',
+                  '&:hover': {
+                    background: '#4C51BF20'
+                  }
                 }}>
-                  {/* Add icon here if needed */}
+                  <Box css={{
+                    width: '30px',
+                    height: '30px',
+                    position: 'relative',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      width: '30px',
+                      height: '20px',
+                      border: '3px solid #4C51BF',
+                      borderRadius: '3px',
+                      bottom: 0
+                    },
+                    '&::after': {
+                      content: '""', 
+                      position: 'absolute',
+                      width: '15px',
+                      height: '8px',
+                      border: '3px solid #4C51BF',
+                      borderRadius: '3px 3px 0 0',
+                      borderBottom: 'none',
+                      top: 0,
+                      left: '50%',
+                      transform: 'translateX(-50%)'
+                    }
+                  }} />
                 </Box>
               </Box>
               <Box css={{
@@ -255,7 +288,7 @@ const GuardrailAIPage = () => {
                     lineHeight: '1',
                     marginBottom: '0.5rem'
                   }}>
-                    {totalViolations}
+                    {formatNumber(totalViolations)}
                   </Text>
                   <Text css={{ 
                     fontSize: '1.1rem',
@@ -265,17 +298,47 @@ const GuardrailAIPage = () => {
                     Total Violations
                   </Text>
                 </Box>
+                {/* Violations Card Visual Element */}
                 <Box css={{
                   width: '60px',
                   height: '60px',
                   borderRadius: '12px',
-                  background: '#F5656510',
+                  background: '#F5656515',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#F56565'
+                  position: 'relative',
+                  '&:hover': {
+                    background: '#F5656520'
+                  }
                 }}>
-                  {/* Add icon here if needed */}
+                  <Box css={{
+                    width: '30px',
+                    height: '30px',
+                    position: 'relative',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      width: '4px',
+                      height: '16px',
+                      background: '#F56565',
+                      borderRadius: '2px',
+                      left: '50%',
+                      top: '2px',
+                      transform: 'translateX(-50%)'
+                    },
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      width: '4px',
+                      height: '4px',
+                      background: '#F56565',
+                      borderRadius: '50%',
+                      bottom: '2px',
+                      left: '50%',
+                      transform: 'translateX(-50%)'
+                    }
+                  }} />
                 </Box>
               </Box>
               <Box css={{
