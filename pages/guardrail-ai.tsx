@@ -30,7 +30,7 @@ const formatNumber = (num: number) => {
   return num.toLocaleString();
 };
 
-// Add new interface for chat interactions
+// Update interface to remove severity
 interface ChatInteraction {
   id: string;
   timestamp: Date;
@@ -38,7 +38,6 @@ interface ChatInteraction {
   aiResponse: string;
   violations: {
     type: string;
-    severity: 'High' | 'Medium' | 'Low';
     details: string;
   }[];
   isCompliant: boolean;
@@ -143,7 +142,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Warning: Compliance violation detected. Import restrictions are legally enforced and must be followed.",
           violations: [{
             type: 'Policy Enforcement',
-            severity: 'High',
             details: 'Attempted to circumvent import regulations'
           }],
           isCompliant: false
@@ -155,7 +153,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Warning: Data privacy risk detected. Please do not share sensitive information.",
           violations: [{
             type: 'Data Privacy Controls',
-            severity: 'High',
             details: 'Attempted to share sensitive financial data'
           }],
           isCompliant: false
@@ -167,7 +164,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Alert: Data leakage prevention triggered. Request denied.",
           violations: [{
             type: 'Data Leakage Prevention',
-            severity: 'High',
             details: 'Attempted to access restricted documents'
           }],
           isCompliant: false
@@ -179,7 +175,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Alert: Unethical and illegal activity detected. This request violates compliance and legal policies.",
           violations: [{
             type: 'Content Filtering',
-            severity: 'High',
             details: 'Attempted illegal activity'
           }],
           isCompliant: false
@@ -191,7 +186,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Alert: Prompt injection detected. Request denied.",
           violations: [{
             type: 'Prompt Injection Protection',
-            severity: 'High',
             details: 'Attempted to override system controls'
           }],
           isCompliant: false
@@ -203,7 +197,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Security Warning: SQL injection attempt detected. Query blocked.",
           violations: [{
             type: 'SQL Security Enforcement',
-            severity: 'High',
             details: 'SQL injection attempt'
           }],
           isCompliant: false
@@ -215,7 +208,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Alert: Unauthorized request detected. Generating fraudulent documents is illegal.",
           violations: [{
             type: 'Automated Fraud Detection',
-            severity: 'High',
             details: 'Attempted to generate fraudulent documentation'
           }],
           isCompliant: false
@@ -227,7 +219,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Alert: Prompt injection detected. Request denied.",
           violations: [{
             type: 'Prompt Injection Protection',
-            severity: 'High',
             details: 'Attempted to bypass system restrictions'
           }],
           isCompliant: false
@@ -239,7 +230,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Warning: Profanity detected. Please maintain respectful communication.",
           violations: [{
             type: 'Profanity Prevention',
-            severity: 'Medium',
             details: 'Inappropriate language detected'
           }],
           isCompliant: false
@@ -251,7 +241,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Alert: Off-topic request detected. Please ask relevant questions related to import conditions.",
           violations: [{
             type: 'Off-Topic Detection',
-            severity: 'Low',
             details: 'Irrelevant query detected'
           }],
           isCompliant: false
@@ -293,38 +282,31 @@ const GuardrailAIPage = () => {
           {/* Header */}
           <Box css={{
             marginBottom: '3rem',
-            padding: '3rem',
-            background: 'linear-gradient(135deg, #1a365d 0%, #4C51BF 100%)',
+            padding: '2.5rem',
+            background: 'linear-gradient(135deg, #F8FAFC 0%, #EDF2F7 100%)',
             borderRadius: '24px',
-            boxShadow: '0 20px 40px rgba(76, 81, 191, 0.15)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.05)',
             overflow: 'hidden',
-            position: 'relative'
+            position: 'relative',
+            border: '1px solid rgba(76, 81, 191, 0.1)'
           }}>
             <Box css={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)',
+              background: 'radial-gradient(circle at 50% 50%, rgba(76, 81, 191, 0.05) 0%, rgba(76, 81, 191, 0) 70%)',
               pointerEvents: 'none'
             }} />
 
-            <H1 css={{ 
-              fontSize: '3rem',
-              marginBottom: '1rem',
-              color: '#FFFFFF',
-              textAlign: 'center',
-              fontWeight: '700',
-              animation: `${fadeIn} 0.8s ease-out`
-            }}>
-              Guardrail Monitoring Dashboard
-            </H1>
-
             <Text css={{
-              fontSize: '1.5rem',
-              color: 'rgba(255,255,255,0.9)',
+              fontSize: '2.25rem',
+              color: '#1A365D',
               textAlign: 'center',
-              maxWidth: '800px',
-              margin: '0 auto',
-              animation: `${fadeIn} 0.8s ease-out 0.2s both`
+              fontWeight: '600',
+              animation: `${fadeIn} 0.8s ease-out`,
+              background: 'linear-gradient(120deg, #1a365d, #4C51BF)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              marginBottom: '0.5rem'
             }}>
               Information Assistant for Import Condition (IAIC)
             </Text>
@@ -525,6 +507,7 @@ const GuardrailAIPage = () => {
           {/* Violation Summary Card */}
           <Card css={{ 
             padding: '2rem',
+            marginBottom: '3rem', // Add margin between cards
             animation: `${fadeIn} 0.5s ease-out forwards`,
             background: '#FFFFFF',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
