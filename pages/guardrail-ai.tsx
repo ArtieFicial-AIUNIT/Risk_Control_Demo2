@@ -507,6 +507,7 @@ const GuardrailAIPage = () => {
           {/* Violation Summary Card */}
           <Card css={{ 
             padding: '2rem',
+            marginBottom: '3rem', // Add margin between cards
             animation: `${fadeIn} 0.5s ease-out forwards`,
             background: '#FFFFFF',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',

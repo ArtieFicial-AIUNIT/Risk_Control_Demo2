@@ -16,7 +16,8 @@ const headerStyles = css`
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Risk Assessment', href: '/assessment' }
+  { label: 'Risk Assessment', href: '/assessment' },
+  { label: 'Guardrail AI', href: '/guardrail-ai' } // Added new nav link
 ];
 
 export const SiteHeader = () => {
