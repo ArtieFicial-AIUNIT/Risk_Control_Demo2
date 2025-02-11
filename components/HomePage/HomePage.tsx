@@ -75,6 +75,7 @@ export const HomePage = () => {
   const [selectedStage, setSelectedStage] = useState<string>('all');
   const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>('all');  // Fixed syntax error
   const [selectedGuardrail, setSelectedGuardrail] = useState<string>('all');
+  const [selectedTechnicalGuardrail, setSelectedTechnicalGuardrail] = useState<string>('all');
 
   // Get unique guardrail names across all stages
   const guardrailOptions = useMemo(() => {
@@ -106,19 +107,21 @@ export const HomePage = () => {
   }, []);
 
   const filteredRisks = useMemo(() => {
-    let risks: Array<{ stage: string; level: string; risk: string; guardrail: string; }> = [];
+    let risks: Array<{ stage: string; level: string; risk: string; guardrail: string; technicalGuardrail: string; }> = [];
     
     Object.entries(guardrailData).forEach(([stageName, stageData]) => {
       if (selectedStage === 'all' || selectedStage === stageName) {
         stageData.guardrails.forEach(guardrail => {
           if ((selectedRiskLevel === 'all' || selectedRiskLevel === guardrail.riskLevel) &&
-              (selectedGuardrail === 'all' || selectedGuardrail === guardrail.name)) {
+              (selectedGuardrail === 'all' || selectedGuardrail === guardrail.name) &&
+              (selectedTechnicalGuardrail === 'all' || selectedTechnicalGuardrail === guardrail.technicalGuardrail)) {
             guardrail.risks.forEach(risk => {
               risks.push({
                 stage: stageName,
                 level: guardrail.riskLevel,
                 risk: risk,
-                guardrail: guardrail.name
+                guardrail: guardrail.name,
+                technicalGuardrail: guardrail.technicalGuardrail
               });
             });
           }
@@ -127,7 +130,44 @@ export const HomePage = () => {
     });
 
     return risks;
-  }, [selectedStage, selectedRiskLevel, selectedGuardrail]);
+  }, [selectedStage, selectedRiskLevel, selectedGuardrail, selectedTechnicalGuardrail]);
+
+  const filterOptions = [
+    {
+      label: "Filter by Stage",  // unchanged
+      value: selectedStage,
+      onChange: setSelectedStage,
+      options: [
+        { label: 'All Stages', value: 'all' },
+        ...Object.entries(guardrailData).map(([key, data]) => ({
+          label: data.title,
+          value: key
+        }))
+      ]
+    },
+    {
+      label: "Filter by Risks",  // changed from "Filter by Risk Level"
+      value: selectedRiskLevel,
+      onChange: setSelectedRiskLevel,
+      options: [
+        { label: 'All Risks', value: 'all' },
+        { label: 'High', value: 'High' },
+        { label: 'Medium', value: 'Medium' },
+        { label: 'Low', value: 'Low' }
+      ]
+    },
+    {
+      label: "Filter by Technical Guardrail Type", // changed from "Filter by Technical Guardrail"
+      value: selectedTechnicalGuardrail,
+      onChange: setSelectedTechnicalGuardrail,
+      options: [
+        { label: 'All Types', value: 'all' },
+        { label: 'Mandatory', value: 'Mandatory' },
+        { label: 'Mandatory for High Risk Systems', value: 'Mandatory for High Risk Systems' },
+        { label: 'Good Practice', value: 'Good practice' }
+      ]
+    }
+  ];
 
   return (
     <AppLayout>
@@ -404,43 +444,7 @@ export const HomePage = () => {
             flexWrap: 'wrap',
             gap: '1rem'
           }}>
-            {[
-              {
-                label: "Filter by Stage",
-                value: selectedStage,
-                onChange: setSelectedStage,
-                options: [
-                  { label: 'All Stages', value: 'all' },
-                  ...Object.keys(guardrailData).map(stage => ({
-                    label: stage.charAt(0).toUpperCase() + stage.slice(1),
-                    value: stage
-                  }))
-                ]
-              },
-              {
-                label: "Filter by Risk Level",
-                value: selectedRiskLevel,
-                onChange: setSelectedRiskLevel,
-                options: [
-                  { label: 'All Levels', value: 'all' },
-                  { label: 'High', value: 'High' },
-                  { label: 'Medium', value: 'Medium' },
-                  { label: 'Low', value: 'Low' }
-                ]
-              },
-              {
-                label: "Filter by Guardrail",
-                value: selectedGuardrail,
-                onChange: setSelectedGuardrail,
-                options: [
-                  { label: 'All Guardrails', value: 'all' },
-                  ...guardrailOptions.map(guardrail => ({
-                    label: guardrail,
-                    value: guardrail
-                  }))
-                ]
-              }
-            ].map((filter) => (
+            {filterOptions.map((filter) => (
               <Box key={filter.label} css={{ 
                 flex: '1',
                 minWidth: '250px',
@@ -616,17 +620,28 @@ export const HomePage = () => {
                       }}>
                         {risk.risk}
                       </p>
-                      <span css={{
-                        padding: '0.35rem 1rem',
-                        borderRadius: '999px',
-                        fontSize: '0.75rem',
-                        fontWeight: '600',
-                        background: riskColors[risk.level as keyof typeof riskColors].gradient,
-                        color: 'white',
-                        whiteSpace: 'nowrap'
-                      }}>
-                        {risk.level}
-                      </span>
+                      <Box css={{ display: 'flex', gap: '0.5rem' }}>
+                        <Tag css={{
+                          background: risk.level === 'High' ? '#FED7D7' 
+                            : risk.level === 'Medium' ? '#FEEBC8' 
+                            : '#C6F6D5',
+                          color: risk.level === 'High' ? '#C53030'
+                            : risk.level === 'Medium' ? '#C05621'
+                            : '#2F855A'
+                        }}>
+                          {risk.level} Risk
+                        </Tag>
+                        <Tag css={{
+                          background: risk.technicalGuardrail === 'Mandatory' ? '#E9D8FD'
+                            : risk.technicalGuardrail === 'Mandatory for High Risk Systems' ? '#FED7E2'
+                            : '#B2F5EA',
+                          color: risk.technicalGuardrail === 'Mandatory' ? '#6B46C1'
+                            : risk.technicalGuardrail === 'Mandatory for High Risk Systems' ? '#B83280'
+                            : '#2C7A7B'
+                        }}>
+                          {risk.technicalGuardrail}
+                        </Tag>
+                      </Box>
                     </div>
 
                     <div css={{
