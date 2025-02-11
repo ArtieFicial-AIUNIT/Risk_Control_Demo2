@@ -260,14 +260,6 @@ const GuardrailAIPage = () => {
           aiResponse: "Live plants must undergo quarantine inspection and treatment if required. They need phytosanitary certificates from the country of origin and must meet BICON conditions. Specific requirements vary by plant species and origin country.",
           violations: [],
           isCompliant: true
-        },
-        {
-          id: '13',
-          timestamp: new Date(baseDate.setHours(12, 00)),
-          userInput: "Can you explain the documentation needed for commercial food imports?",
-          aiResponse: "Commercial food imports require: 1) Import Declaration 2) Commercial invoice 3) Packing list 4) Health/Phytosanitary certificates 5) Certificate of Origin if applicable. All documents must be submitted through BICON system.",
-          violations: [],
-          isCompliant: true
         }
       ];
 
